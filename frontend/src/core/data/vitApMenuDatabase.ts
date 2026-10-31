@@ -1,7 +1,7 @@
 import { FoodItem, WeeklyMessSchedule } from '../types/nutrition';
 import { INDIAN_MESS_FOOD_DATABASE } from './foodDatabase';
 
-// VIT-AP University Mess Menu (October 2026 Veg & Non-Veg Complete Schedule)
+// VIT-AP University Mess Menu (with granular individual ingredient separation)
 export const VIT_AP_FOOD_ITEMS: FoodItem[] = [
   {
     "id": "vit_ghee_veg_pongal",
@@ -2088,6 +2088,510 @@ export const VIT_AP_FOOD_ITEMS: FoodItem[] = [
     "category": "staple",
     "servingUnit": "serving",
     "powerLevel": 30
+  },
+  {
+    "id": "vit_groundnut_peanut_chutney",
+    "name": "Groundnut / Peanut Chutney",
+    "calories": 45,
+    "protein": 1.0,
+    "carbs": 3.0,
+    "fats": 3.5,
+    "fiber": 1.0,
+    "defaultServing": "2 tbsp",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 10
+  },
+  {
+    "id": "vit_traditional_sambar",
+    "name": "Traditional Sambar",
+    "calories": 130,
+    "protein": 6.5,
+    "carbs": 18.0,
+    "fats": 3.5,
+    "fiber": 3.8,
+    "defaultServing": "1 bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 65
+  },
+  {
+    "id": "vit_white_bread_2_slices",
+    "name": "White Bread (2 Slices)",
+    "calories": 140,
+    "protein": 4.0,
+    "carbs": 26.0,
+    "fats": 2.0,
+    "fiber": 1.2,
+    "defaultServing": "2 slices",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 40
+  },
+  {
+    "id": "vit_butter_portion",
+    "name": "Butter Portion",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_mixed_fruit_jam",
+    "name": "Mixed Fruit Jam",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_hot_tea_chai",
+    "name": "Hot Tea (Chai)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_hot_filter_coffee",
+    "name": "Hot Filter Coffee",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_milk_glass",
+    "name": "Fresh Milk (Glass)",
+    "calories": 130,
+    "protein": 6.0,
+    "carbs": 10.0,
+    "fats": 7.0,
+    "fiber": 0.0,
+    "defaultServing": "1 glass",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 60
+  },
+  {
+    "id": "vit_boiled_chana_chickpeas",
+    "name": "Boiled Chana (Chickpeas)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_chopped_onion_tomato_salad",
+    "name": "Chopped Onion & Tomato Salad",
+    "calories": 20,
+    "protein": 0.5,
+    "carbs": 4.5,
+    "fats": 0.1,
+    "fiber": 1.0,
+    "defaultServing": "1 small bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 5
+  },
+  {
+    "id": "vit_pure_desi_ghee",
+    "name": "Pure Desi Ghee",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_gunpowder_podi_masala",
+    "name": "Gunpowder / Podi Masala",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_sliced_onions_salad",
+    "name": "Sliced Onions (Salad)",
+    "calories": 20,
+    "protein": 0.5,
+    "carbs": 4.5,
+    "fats": 0.1,
+    "fiber": 1.0,
+    "defaultServing": "1 small bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 5
+  },
+  {
+    "id": "vit_fresh_lemon_wedges",
+    "name": "Fresh Lemon Wedges",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_black_grapes",
+    "name": "Fresh Black Grapes",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_banana_sliced",
+    "name": "Fresh Banana (Sliced)",
+    "calories": 105,
+    "protein": 1.3,
+    "carbs": 27.0,
+    "fats": 0.3,
+    "fiber": 3.1,
+    "defaultServing": "1 piece",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 13
+  },
+  {
+    "id": "vit_fresh_pomegranate_seeds",
+    "name": "Fresh Pomegranate Seeds",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_warm_milk_glass",
+    "name": "Warm Milk (Glass)",
+    "calories": 130,
+    "protein": 6.0,
+    "carbs": 10.0,
+    "fats": 7.0,
+    "fiber": 0.0,
+    "defaultServing": "1 glass",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 60
+  },
+  {
+    "id": "vit_coffee_sachet_powder",
+    "name": "Coffee Sachet/Powder",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_brown_bread_2_slices",
+    "name": "Brown Bread (2 Slices)",
+    "calories": 140,
+    "protein": 4.0,
+    "carbs": 26.0,
+    "fats": 2.0,
+    "fiber": 1.2,
+    "defaultServing": "2 slices",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 40
+  },
+  {
+    "id": "vit_carrot_salad_fresh_cut",
+    "name": "Carrot Salad (Fresh Cut)",
+    "calories": 25,
+    "protein": 0.6,
+    "carbs": 6.0,
+    "fats": 0.1,
+    "fiber": 1.8,
+    "defaultServing": "1 small bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 6
+  },
+  {
+    "id": "vit_cucumber_salad_fresh_cut",
+    "name": "Cucumber Salad (Fresh Cut)",
+    "calories": 15,
+    "protein": 0.4,
+    "carbs": 3.0,
+    "fats": 0.1,
+    "fiber": 0.7,
+    "defaultServing": "1 small bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 4
+  },
+  {
+    "id": "vit_beetroot_salad_fresh_cut",
+    "name": "Beetroot Salad (Fresh Cut)",
+    "calories": 30,
+    "protein": 0.8,
+    "carbs": 7.0,
+    "fats": 0.1,
+    "fiber": 2.0,
+    "defaultServing": "1 small bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 8
+  },
+  {
+    "id": "vit_fresh_pineapple_chunks",
+    "name": "Fresh Pineapple Chunks",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_green_grapes",
+    "name": "Fresh Green Grapes",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_lemon_water_unsweetened",
+    "name": "Lemon Water (Unsweetened)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_hydrating_sabja_seeds",
+    "name": "Hydrating Sabja Seeds",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_veg_manchurian_balls",
+    "name": "Veg Manchurian Balls",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_hakka_noodles",
+    "name": "Hakka Noodles",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_uggani_puffed_rice_upma",
+    "name": "Uggani (Puffed Rice Upma)",
+    "calories": 180,
+    "protein": 3.5,
+    "carbs": 40.0,
+    "fats": 0.5,
+    "fiber": 0.8,
+    "defaultServing": "1 bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 35
+  },
+  {
+    "id": "vit_mirchi_bajji_crispy",
+    "name": "Mirchi Bajji (Crispy)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_watermelon_cubed",
+    "name": "Fresh Watermelon (Cubed)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_muskmelon_cubed",
+    "name": "Fresh Muskmelon (Cubed)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_fresh_papaya_cubed",
+    "name": "Fresh Papaya (Cubed)",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
+  },
+  {
+    "id": "vit_vegetable_fried_rice",
+    "name": "Vegetable Fried Rice",
+    "calories": 180,
+    "protein": 3.5,
+    "carbs": 40.0,
+    "fats": 0.5,
+    "fiber": 0.8,
+    "defaultServing": "1 bowl",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 35
+  },
+  {
+    "id": "vit_gobhi_manchurian",
+    "name": "Gobhi Manchurian",
+    "calories": 100,
+    "protein": 2.5,
+    "carbs": 16.0,
+    "fats": 2.5,
+    "fiber": 1.2,
+    "defaultServing": "1 serving",
+    "isVeg": true,
+    "category": "staple",
+    "servingUnit": "serving",
+    "powerLevel": 25
   }
 ];
 
@@ -2101,15 +2605,21 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
     "breakfast": [
       "vit_ghee_veg_pongal",
       "vit_bhature_2_pcs_big",
-      "vit_groundnut_chutney_sambar",
+      "vit_groundnut_peanut_chutney",
+      "vit_traditional_sambar",
       "vit_chole_curry",
-      "vit_white_bread_butter_jam",
+      "vit_white_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_sprouts_1_small_cup",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_boiled_egg_non_veg"
     ],
     "lunch": [
-      "vit_boiled_chana_salad_with_onion_tomat",
+      "vit_boiled_chana_chickpeas",
+      "vit_chopped_onion_tomato_salad",
       "vit_chapathi",
       "vit_white_rice",
       "vit_palak_dal",
@@ -2119,17 +2629,20 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_capsicum_tomato_masala",
       "vit_fryums",
       "vit_butter_milk",
-      "vit_sorakaya_perugu_chutney_ghee_podi",
-      "vit_jilebi",
-      "vit_ghee_podi"
+      "vit_pure_desi_ghee",
+      "vit_gunpowder_podi_masala",
+      "vit_jilebi"
     ],
     "snacks": [
       "vit_dry_maggi_non_sticky",
       "vit_tomato_sauce",
-      "vit_tea_coffee_milk"
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass"
     ],
     "dinner": [
-      "vit_onions_lemon_salad",
+      "vit_sliced_onions_salad",
+      "vit_fresh_lemon_wedges",
       "vit_methi_roti",
       "vit_white_rice",
       "vit_pesara_pappu",
@@ -2139,9 +2652,12 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_paneer_butter_masala_veg",
       "vit_ladies_finger_boiled_fry",
       "vit_thick_curd",
-      "vit_mixed_fruit_salad_black_grapes_bana",
+      "vit_fresh_black_grapes",
+      "vit_fresh_banana_sliced",
+      "vit_fresh_pomegranate_seeds",
       "vit_gongura_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   },
   "tuesday": {
@@ -2150,13 +2666,18 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_vada_pav",
       "vit_coconut_chutney",
       "vit_mint_chutney",
-      "vit_brown_bread_butter_jam",
+      "vit_brown_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_ragi_malt_with_salt_1_medium_glass",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_boiled_egg_non_veg"
     ],
     "lunch": [
-      "vit_carrot_cucumber_salad",
+      "vit_carrot_salad_fresh_cut",
+      "vit_cucumber_salad_fresh_cut",
       "vit_roti",
       "vit_white_rice",
       "vit_dosakaya_pappu",
@@ -2167,15 +2688,19 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_potato_chips",
       "vit_dahi_vada",
       "vit_dosakaya_tomato_chutney",
-      "vit_ghee_podi"
+      "vit_pure_desi_ghee",
+      "vit_gunpowder_podi_masala"
     ],
     "snacks": [
       "vit_aloo_samosa_1_big_pc",
       "vit_tomato_sauce_salt_mirchi",
-      "vit_ginger_tea_coffee_milk"
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass"
     ],
     "dinner": [
-      "vit_beetroot_carrot_salad",
+      "vit_beetroot_salad_fresh_cut",
+      "vit_carrot_salad_fresh_cut",
       "vit_pulka",
       "vit_white_rice",
       "vit_dal_makhani",
@@ -2186,7 +2711,8 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_thick_curd",
       "vit_guava_fruit",
       "vit_tomato_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   },
   "wednesday": {
@@ -2195,13 +2721,18 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_cucumber_poha",
       "vit_sambar",
       "vit_coconut_chutney",
-      "vit_white_bread_butter_jam",
+      "vit_white_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_sprouts_1_small_cup",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_masala_onion_omlet_non_veg"
     ],
     "lunch": [
-      "vit_onions_lemon_salad",
+      "vit_sliced_onions_salad",
+      "vit_fresh_lemon_wedges",
       "vit_palak_roti",
       "vit_white_rice",
       "vit_amaranthus_dal",
@@ -2217,10 +2748,13 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
     "snacks": [
       "vit_onion_soft_pakoda_less_oily",
       "vit_tomato_chutney",
-      "vit_tea_coffee_milk"
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass"
     ],
     "dinner": [
-      "vit_beetroot_carrot_salad",
+      "vit_beetroot_salad_fresh_cut",
+      "vit_carrot_salad_fresh_cut",
       "vit_chapathi",
       "vit_white_rice",
       "vit_tomato_dal",
@@ -2229,9 +2763,12 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_bottle_guard_chana_dal_fry",
       "vit_aloo_mutter_curry",
       "vit_thick_curd",
-      "vit_mixed_fruit_salad_pomegranate_pine_",
+      "vit_fresh_pomegranate_seeds",
+      "vit_fresh_pineapple_chunks",
+      "vit_fresh_green_grapes",
       "vit_lemon_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   },
   "thursday": {
@@ -2240,13 +2777,18 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_lemon_sevai",
       "vit_aloo_mutter_curry_1_chickpea_masala",
       "vit_coconut_chutney",
-      "vit_white_bread_butter_jam",
+      "vit_white_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_sprouts_1_small_cup",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_masala_onion_omlet_non_veg"
     ],
     "lunch": [
-      "vit_carrot_cucumber_salad",
+      "vit_carrot_salad_fresh_cut",
+      "vit_cucumber_salad_fresh_cut",
       "vit_pulka",
       "vit_white_rice",
       "vit_sorrel_leaves_dal_gongura_pappu",
@@ -2255,38 +2797,51 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_guthi_vankaya_curry",
       "vit_ridge_gourd_fry",
       "vit_finger_fryums",
-      "vit_lemon_water_w_o_sugar_sabja_seeds",
+      "vit_lemon_water_unsweetened",
+      "vit_hydrating_sabja_seeds",
       "vit_potlakaya_perugu_chutney",
-      "vit_ghee_podi"
+      "vit_pure_desi_ghee",
+      "vit_gunpowder_podi_masala"
     ],
     "snacks": [
       "vit_veg_puff_1_29_boiled_peanuts_with_o",
       "vit_tomato_sauce",
-      "vit_tea_coffee_milk"
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass"
     ],
     "dinner": [
-      "vit_onions_lemon_salad",
+      "vit_sliced_onions_salad",
+      "vit_fresh_lemon_wedges",
       "vit_roti",
       "vit_white_rice",
       "vit_dal_fry",
       "vit_beetroot_tomato_rasam",
-      "vit_veg_manchuria_noodles_tomato_sauce",
+      "vit_veg_manchurian_balls",
+      "vit_hakka_noodles",
+      "vit_tomato_sauce",
       "vit_butternut_squash_curry",
       "vit_thick_curd",
       "vit_banana",
       "vit_ginger_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   },
   "friday": {
     "breakfast": [
-      "vit_uggani_mirchi_bajji",
+      "vit_uggani_puffed_rice_upma",
+      "vit_mirchi_bajji_crispy",
       "vit_vegetable_daliya_kitchidi",
       "vit_coconut_chutney",
       "vit_mango_pickle",
-      "vit_brown_bread_butter_jam",
+      "vit_brown_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_sprouts_1_small_cup",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_boiled_egg_non_veg"
     ],
     "lunch": [
@@ -2306,10 +2861,13 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
     "snacks": [
       "vit_raw_banana_bhajji_2_pcs_less_oily",
       "vit_coconut_coriander_chutney",
-      "vit_ginger_tea_coffee_milk"
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass"
     ],
     "dinner": [
-      "vit_onions_lemon_salad",
+      "vit_sliced_onions_salad",
+      "vit_fresh_lemon_wedges",
       "vit_lacha_paratha",
       "vit_white_rice",
       "vit_pesara_pappu",
@@ -2318,9 +2876,12 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_paneer_lababdar_veg",
       "vit_tomato_peas_capsicum_masala",
       "vit_thick_curd",
-      "vit_watermelon_muskmelon_papaya_cut_fru",
+      "vit_fresh_watermelon_cubed",
+      "vit_fresh_muskmelon_cubed",
+      "vit_fresh_papaya_cubed",
       "vit_mango_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   },
   "saturday": {
@@ -2329,13 +2890,18 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_vegetable_poha",
       "vit_peanut_chutney",
       "vit_tomato_chutney",
-      "vit_white_bread_butter_jam",
+      "vit_white_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_sprouts_1_small_cup",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_boiled_egg_non_veg"
     ],
     "lunch": [
-      "vit_carrot_cucumber_salad",
+      "vit_carrot_salad_fresh_cut",
+      "vit_cucumber_salad_fresh_cut",
       "vit_pulka",
       "vit_white_rice",
       "vit_mudda_pappu",
@@ -2346,7 +2912,8 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_papad",
       "vit_majiga_pulusu",
       "vit_avakaya_mango_pickle",
-      "vit_ghee_podi"
+      "vit_pure_desi_ghee",
+      "vit_gunpowder_podi_masala"
     ],
     "snacks": [
       "vit_punugulu_8_pcs_medium_size",
@@ -2354,17 +2921,21 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_cold_badam_milk_1_medium_glass"
     ],
     "dinner": [
-      "vit_beetroot_carrot_salad",
+      "vit_beetroot_salad_fresh_cut",
+      "vit_carrot_salad_fresh_cut",
       "vit_roti",
       "vit_white_rice",
       "vit_dal_maharani",
       "vit_bendakaya_bhindi_pulusu",
-      "vit_vegetable_fried_rice_gobhi_manchuri",
+      "vit_vegetable_fried_rice",
+      "vit_gobhi_manchurian",
+      "vit_tomato_sauce",
       "vit_cabbage_beans_poriyal",
       "vit_thick_curd",
       "vit_fruit_custard_with_pine_apple_3_and",
       "vit_red_chilli_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   },
   "sunday": {
@@ -2373,13 +2944,18 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_paneer_paratha_2_pcs_thin",
       "vit_coconut_chutney",
       "vit_thick_curd_mango_pickle",
-      "vit_brown_bread_butter_jam",
+      "vit_brown_bread_2_slices",
+      "vit_butter_portion",
+      "vit_mixed_fruit_jam",
       "vit_sprouts_1_small_cup",
-      "vit_tea_coffee_milk",
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass",
       "vit_egg_bhurji_non_veg"
     ],
     "lunch": [
-      "vit_onions_lemon_salad",
+      "vit_sliced_onions_salad",
+      "vit_fresh_lemon_wedges",
       "vit_chapathi",
       "vit_white_rice",
       "vit_dal_fry",
@@ -2393,10 +2969,13 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
     ],
     "snacks": [
       "vit_plum_cake_egg_less_1_big_pc",
-      "vit_masala_tea_coffee_milk"
+      "vit_hot_tea_chai",
+      "vit_hot_filter_coffee",
+      "vit_fresh_milk_glass"
     ],
     "dinner": [
-      "vit_beetroot_carrot_salad",
+      "vit_beetroot_salad_fresh_cut",
+      "vit_carrot_salad_fresh_cut",
       "vit_pulka",
       "vit_white_rice",
       "vit_pesara_pappu",
@@ -2407,7 +2986,8 @@ export const VIT_AP_WEEKLY_MESS_SCHEDULE: WeeklyMessSchedule = {
       "vit_thick_curd",
       "vit_papaya_cut_fruit",
       "vit_tomato_pickle",
-      "vit_milk_cofee_powder"
+      "vit_warm_milk_glass",
+      "vit_coffee_sachet_powder"
     ]
   }
 };

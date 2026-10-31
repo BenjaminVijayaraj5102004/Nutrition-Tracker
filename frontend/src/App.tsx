@@ -21,6 +21,7 @@ import { BentoOverview } from './modules/nutrition/components/BentoOverview';
 import { MessCalendarTabs } from './modules/calendar/components/MessCalendarTabs';
 import { MealSection } from './modules/meals/components/MealSection';
 import { CanteenDrawer } from './modules/canteen/components/CanteenDrawer';
+import { ExternalFoodsSection } from './modules/canteen/components/ExternalFoodsSection';
 import { ScannerModal } from './modules/scanner/components/ScannerModal';
 
 import {
@@ -32,6 +33,7 @@ const STORAGE_KEYS = {
   PROFILE: 'user_profile_v2',
   SCHEDULE: 'weekly_mess_schedule_vitap_v3',
   DAILY_PORTIONS: 'daily_portions_v3_',
+  EXTERNAL_ITEMS: 'external_foods_custom_v3',
 };
 
 export const App: React.FC = () => {
@@ -103,6 +105,40 @@ export const App: React.FC = () => {
     );
   });
 
+  // Custom External / Food Street items persisted in storage
+  const [externalFoods, setExternalFoods] = useState<FoodItem[]>(() => {
+    return storageService.getItem<FoodItem[]>(STORAGE_KEYS.EXTERNAL_ITEMS, [
+      {
+        id: 'ext_tandoori_chicken_preset',
+        name: 'Food Street Tandoori Chicken (4 Pcs)',
+        calories: 520,
+        protein: 60.0,
+        carbs: 6.0,
+        fats: 26.0,
+        fiber: 1.0,
+        defaultServing: '1 plate (4 pcs)',
+        servingUnit: 'plate',
+        category: 'canteen',
+        isVeg: false,
+        powerLevel: 600,
+      },
+      {
+        id: 'ext_chicken_shawarma_preset',
+        name: 'Campus Shawarma Roll (Double Chicken)',
+        calories: 420,
+        protein: 26.0,
+        carbs: 38.0,
+        fats: 16.0,
+        fiber: 2.0,
+        defaultServing: '1 roll',
+        servingUnit: 'roll',
+        category: 'canteen',
+        isVeg: false,
+        powerLevel: 260,
+      },
+    ]);
+  });
+
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
 
   const handleUpdateProfile = (updates: Partial<UserProfile>) => {
@@ -156,6 +192,32 @@ export const App: React.FC = () => {
     handleIncrementPortion(food.id);
   };
 
+  const handleAddExternalItem = (item: FoodItem) => {
+    setExternalFoods((prev) => {
+      const updated = [item, ...prev];
+      storageService.setItem(STORAGE_KEYS.EXTERNAL_ITEMS, updated);
+      return updated;
+    });
+  };
+
+  const handleRemoveExternalItem = (id: string) => {
+    setExternalFoods((prev) => {
+      const updated = prev.filter((it) => it.id !== id);
+      storageService.setItem(STORAGE_KEYS.EXTERNAL_ITEMS, updated);
+      return updated;
+    });
+
+    // Remove from logged portions if currently selected
+    if (dayPortions[id]) {
+      setDayPortions((prev) => {
+        const copy = { ...prev };
+        delete copy[id];
+        storageService.setItem(`${STORAGE_KEYS.DAILY_PORTIONS}${selectedDay}`, copy);
+        return copy;
+      });
+    }
+  };
+
   const handleResetDay = () => {
     if (window.confirm(`Reset all meal logs for ${selectedDay.toUpperCase()}?`)) {
       setDayPortions({});
@@ -171,7 +233,16 @@ export const App: React.FC = () => {
     });
   };
 
-  // Compute nutrients using all combined dishes (standard + VIT-AP university menu)
+  // Build combined pool of all items: standard Indian, VIT-AP university menu, plus user custom external foods
+  const allFoodsMap = useMemo(() => {
+    const map = new Map<string, FoodItem>();
+    ALL_COMBINED_FOOD_DATABASE.forEach((f) => map.set(f.id, f));
+    CANTEEN_SUPPLEMENTS.forEach((f) => map.set(f.id, f));
+    externalFoods.forEach((f) => map.set(f.id, f));
+    return map;
+  }, [externalFoods]);
+
+  // Compute nutrients using all logged portions
   const consumedMacros = useMemo(() => {
     let calories = 0;
     let protein = 0;
@@ -181,7 +252,7 @@ export const App: React.FC = () => {
 
     Object.entries(dayPortions).forEach(([foodId, count]) => {
       if (count <= 0) return;
-      const food = ALL_COMBINED_FOOD_DATABASE.find((f) => f.id === foodId);
+      const food = allFoodsMap.get(foodId);
       if (food) {
         const portion = calculatorService.calculateFoodPortion(food, count);
         calories += portion.calories;
@@ -199,7 +270,7 @@ export const App: React.FC = () => {
       fats: Math.round(fats * 10) / 10,
       fiber: Math.round(fiber * 10) / 10,
     };
-  }, [dayPortions]);
+  }, [dayPortions, allFoodsMap]);
 
   const deficitAnalysis = useMemo(() => {
     return calculatorService.calculateDeficit(profile.dailyTargets, consumedMacros);
@@ -209,7 +280,7 @@ export const App: React.FC = () => {
 
   const getFoodsForIds = (ids: string[] = []): FoodItem[] => {
     return ids
-      .map((id) => ALL_COMBINED_FOOD_DATABASE.find((f) => f.id === id))
+      .map((id) => allFoodsMap.get(id))
       .filter((f): f is FoodItem => !!f);
   };
 
@@ -308,10 +379,20 @@ export const App: React.FC = () => {
           />
         </div>
 
-        {/* Canteen & Outside Supplements Bento Shelf */}
+        {/* Campus Canteen & Supplements Shelf */}
         <CanteenDrawer
           supplements={CANTEEN_SUPPLEMENTS}
           onQuickAdd={handleQuickAddCanteen}
+          dayPortions={dayPortions}
+        />
+
+        {/* External Foods & Food Street Section */}
+        <ExternalFoodsSection
+          externalItems={externalFoods}
+          onAddCustomItem={handleAddExternalItem}
+          onRemoveItem={handleRemoveExternalItem}
+          onIncrementPortion={handleIncrementPortion}
+          onDecrementPortion={handleDecrementPortion}
           dayPortions={dayPortions}
         />
       </main>
