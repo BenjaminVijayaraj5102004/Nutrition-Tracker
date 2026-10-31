@@ -1,6 +1,6 @@
 import React from 'react';
 import { FoodItem } from '../../../core/types/nutrition';
-import { Plus, Minus, Flame, Sparkles } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 
 interface PortionCounterProps {
   food: FoodItem;
@@ -19,95 +19,93 @@ export const PortionCounter: React.FC<PortionCounterProps> = ({
 
   return (
     <div
-      className={`relative rounded-xl border p-3 transition-all duration-200 ${
+      className={`rounded-xl border p-3.5 transition-all ${
         isSelected
-          ? 'bg-slate-900/90 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/30'
-          : 'bg-slate-950/60 border-slate-800/80 hover:border-slate-700'
+          ? 'bg-indigo-50/40 border-indigo-200'
+          : 'bg-white border-slate-200/90 hover:border-slate-300'
       }`}
     >
-      {/* Anime tag or badge */}
-      {food.animeTag && (
-        <span className="absolute -top-2 right-2 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-violet-950 border border-violet-500/50 text-violet-300">
-          {food.animeTag}
-        </span>
-      )}
-
       <div className="flex items-start justify-between gap-2 mb-2">
         <div>
           <div className="flex items-center gap-1.5">
             <span
-              className={`w-2 h-2 rounded-full ${
-                food.isVeg ? 'bg-emerald-400' : 'bg-rose-500'
+              className={`w-2 h-2 rounded-full shrink-0 ${
+                food.isVeg ? 'bg-emerald-500' : 'bg-rose-500'
               }`}
               title={food.isVeg ? 'Vegetarian' : 'Non-Vegetarian'}
             />
-            <h4 className="text-xs md:text-sm font-bold text-white leading-tight">
+            <h4 className="text-xs font-semibold text-slate-900 leading-snug">
               {food.name}
             </h4>
           </div>
           {food.hindiName && (
-            <p className="text-[10px] text-slate-400 font-medium ml-3.5">
+            <p className="text-[11px] text-slate-500 ml-3.5">
               {food.hindiName}
             </p>
           )}
         </div>
 
-        {/* Serving Unit Indicator */}
-        <span className="text-[10px] text-slate-400 font-medium bg-slate-800/60 px-1.5 py-0.5 rounded">
+        <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/60">
           {food.defaultServing}
         </span>
       </div>
 
-      {/* Macros overview */}
-      <div className="flex items-center gap-2 text-[10px] font-mono text-slate-300 mb-2.5">
-        <span className="text-emerald-400 font-semibold">
-          {food.calories * (count || 1)} kcal
-        </span>
-        <span className="text-slate-600">•</span>
-        <span className="text-cyan-400 font-semibold">
-          {Math.round(food.protein * (count || 1) * 10) / 10}g P
-        </span>
-        <span className="text-slate-600">•</span>
-        <span className="text-amber-400">
-          {Math.round(food.carbs * (count || 1) * 10) / 10}g C
-        </span>
+      {/* Nutrients Per Serving */}
+      <div className="flex items-center gap-3 text-[11px] text-slate-600 mb-3 bg-slate-50/80 px-2.5 py-1.5 rounded-lg border border-slate-100">
+        <div>
+          <span className="text-slate-400 block text-[9px] uppercase font-medium">Protein</span>
+          <span className="font-semibold text-slate-800">{food.protein}g</span>
+        </div>
+        <div className="w-px h-4 bg-slate-200" />
+        <div>
+          <span className="text-slate-400 block text-[9px] uppercase font-medium">Energy</span>
+          <span className="font-semibold text-slate-800">{food.calories} kcal</span>
+        </div>
+        <div className="w-px h-4 bg-slate-200" />
+        <div>
+          <span className="text-slate-400 block text-[9px] uppercase font-medium">Carbs</span>
+          <span className="text-slate-700">{food.carbs}g</span>
+        </div>
       </div>
 
-      {/* Portion Controls: Minus / Count / Plus */}
-      <div className="flex items-center justify-between pt-1 border-t border-slate-800/60">
-        <button
-          onClick={onDecrement}
-          disabled={count <= 0}
-          className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm transition-all ${
-            count > 0
-              ? 'bg-slate-800 hover:bg-rose-950/60 hover:text-rose-400 text-slate-200 active:scale-90 border border-slate-700'
-              : 'bg-slate-900/50 text-slate-600 cursor-not-allowed border border-slate-900'
-          }`}
-          aria-label={`Decrease portion of ${food.name}`}
-        >
-          <Minus className="w-3.5 h-3.5" />
-        </button>
+      {/* Counter Controls */}
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-slate-500">
+          {count > 0 ? (
+            <span className="font-medium text-indigo-700">
+              {count} {count === 1 ? 'serving' : 'servings'} logged
+            </span>
+          ) : (
+            'Not logged'
+          )}
+        </span>
 
-        <div className="flex items-baseline gap-1">
-          <span
-            className={`text-base font-black font-mono transition-colors ${
-              isSelected ? 'text-cyan-400' : 'text-slate-500'
+        <div className="flex items-center gap-1.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+          <button
+            onClick={onDecrement}
+            disabled={count === 0}
+            className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${
+              count > 0
+                ? 'bg-white text-slate-700 hover:bg-slate-50 shadow-2xs'
+                : 'text-slate-300 cursor-not-allowed'
             }`}
+            aria-label="Decrease serving"
           >
+            <Minus className="w-3.5 h-3.5" />
+          </button>
+          
+          <span className="w-7 text-center font-semibold text-xs text-slate-800">
             {count}
           </span>
-          <span className="text-[10px] text-slate-500 uppercase font-semibold">
-            {food.servingUnit}
-          </span>
-        </div>
 
-        <button
-          onClick={onIncrement}
-          className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-500 hover:to-cyan-400 text-white shadow-md shadow-cyan-950/40 active:scale-90 transition-all border border-cyan-400/40"
-          aria-label={`Increase portion of ${food.name}`}
-        >
-          <Plus className="w-3.5 h-3.5" />
-        </button>
+          <button
+            onClick={onIncrement}
+            className="w-7 h-7 rounded-md bg-white text-slate-700 hover:bg-slate-50 shadow-2xs flex items-center justify-center transition-colors"
+            aria-label="Increase serving"
+          >
+            <Plus className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { DayOfWeek } from '../../../core/types/nutrition';
-import { Calendar, Sparkles } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 interface MessCalendarTabsProps {
   selectedDay: DayOfWeek;
@@ -25,19 +25,18 @@ export const MessCalendarTabs: React.FC<MessCalendarTabsProps> = ({
 }) => {
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300 uppercase tracking-wider">
-          <Calendar className="w-3.5 h-3.5 text-violet-400" />
-          <span>7-Day Mess Rotation</span>
+      <div className="flex items-center justify-between mb-2.5">
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+          <Calendar className="w-4 h-4 text-slate-500" />
+          <span>Weekly Mess Menu</span>
         </div>
-        <div className="text-[11px] text-cyan-400 font-semibold flex items-center gap-1">
-          <Sparkles className="w-3 h-3" />
-          <span>Active: {todayDay.toUpperCase()} (Today)</span>
-        </div>
+        <span className="text-xs text-slate-500">
+          Today is <span className="font-semibold text-slate-800 capitalize">{todayDay}</span>
+        </span>
       </div>
 
-      {/* Horizontally scrollable day tabs for mobile */}
-      <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
+      {/* Segmented Paper Tab Bar */}
+      <div className="flex items-center gap-1.5 p-1 bg-slate-200/60 rounded-xl overflow-x-auto">
         {DAYS.map(({ key, label, short }) => {
           const isSelected = selectedDay === key;
           const isToday = todayDay === key;
@@ -46,23 +45,16 @@ export const MessCalendarTabs: React.FC<MessCalendarTabsProps> = ({
             <button
               key={key}
               onClick={() => onSelectDay(key)}
-              className={`flex-1 min-w-[70px] sm:min-w-[85px] py-2 px-2 rounded-xl text-center transition-all duration-200 border relative ${
+              className={`flex-1 min-w-[72px] py-1.5 px-2 rounded-lg text-xs font-medium transition-all text-center relative ${
                 isSelected
-                  ? 'bg-gradient-to-b from-violet-600 to-indigo-700 text-white border-violet-400/80 shadow-[0_0_15px_rgba(139,92,246,0.4)] scale-102'
-                  : 'bg-slate-950/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200'
+                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
               }`}
             >
+              <span className="block">{short}</span>
               {isToday && (
-                <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 px-1.5 py-0.2 bg-cyan-500 text-[8px] font-black uppercase text-slate-950 rounded-full tracking-wider shadow-[0_0_8px_rgba(6,182,212,0.6)]">
-                  Today
-                </span>
+                <span className="inline-block w-1 h-1 rounded-full bg-indigo-600 mx-auto mt-0.5" />
               )}
-              <span className="block text-[10px] font-medium opacity-80">
-                {short}
-              </span>
-              <span className="block text-xs sm:text-sm font-extrabold capitalize">
-                {label.slice(0, 3)}
-              </span>
             </button>
           );
         })}

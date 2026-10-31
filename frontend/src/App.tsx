@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import confetti from 'canvas-confetti';
 import {
   DayOfWeek,
   UserProfile,
@@ -24,28 +23,19 @@ import { ScannerModal } from './modules/scanner/components/ScannerModal';
 import {
   Camera,
   RotateCcw,
-  Volume2,
-  VolumeX,
-  PlusCircle,
-  Sparkles,
-  Trophy,
-  Flame,
 } from 'lucide-react';
 
 const STORAGE_KEYS = {
   PROFILE: 'user_profile_v2',
   SCHEDULE: 'weekly_mess_schedule_v2',
-  DAILY_PORTIONS: 'daily_portions_', // daily_portions_monday, etc.
-  SOUND_ENABLED: 'sound_enabled',
+  DAILY_PORTIONS: 'daily_portions_',
 };
 
 export const App: React.FC = () => {
+
   const storageService = ServiceFactory.getStorageService();
   const calculatorService = ServiceFactory.getCalculatorService();
-  const audioService = ServiceFactory.getAudioService();
-  const scannerService = ServiceFactory.getScannerService();
 
-  // Helper to get today's day of week
   const getTodayDayOfWeek = (): DayOfWeek => {
     const days: DayOfWeek[] = [
       'sunday',
@@ -63,7 +53,6 @@ export const App: React.FC = () => {
   const todayDay = useMemo(() => getTodayDayOfWeek(), []);
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(todayDay);
 
-  // User Profile state with local persistence
   const [profile, setProfile] = useState<UserProfile>(() => {
     const initialTargets = calculatorService.calculateDailyTargets(65, 172, 'male', 'muscle_gain');
     return storageService.getItem<UserProfile>(STORAGE_KEYS.PROFILE, {
@@ -78,12 +67,6 @@ export const App: React.FC = () => {
     });
   });
 
-  // Sound preference state
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
-    return storageService.getItem<boolean>(STORAGE_KEYS.SOUND_ENABLED, true);
-  });
-
-  // Weekly Mess Schedule state
   const [schedule, setSchedule] = useState<WeeklyMessSchedule>(() => {
     return storageService.getItem<WeeklyMessSchedule>(
       STORAGE_KEYS.SCHEDULE,
@@ -91,7 +74,6 @@ export const App: React.FC = () => {
     );
   });
 
-  // Daily logged portions state for the current day: { [foodId]: count }
   const [dayPortions, setDayPortions] = useState<Record<string, number>>(() => {
     return storageService.getItem<Record<string, number>>(
       `${STORAGE_KEYS.DAILY_PORTIONS}${todayDay}`,
@@ -99,16 +81,8 @@ export const App: React.FC = () => {
     );
   });
 
-  // Scanner modal toggle
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
 
-  // Sync sound service
-  useEffect(() => {
-    audioService.setSoundEnabled(soundEnabled);
-    storageService.setItem(STORAGE_KEYS.SOUND_ENABLED, soundEnabled);
-  }, [soundEnabled]);
-
-  // Persist profile and recalculate targets
   const handleUpdateProfile = (updates: Partial<UserProfile>) => {
     setProfile((prev) => {
       const merged = { ...prev, ...updates };
@@ -123,7 +97,6 @@ export const App: React.FC = () => {
     });
   };
 
-  // Switch Day and load its portion counts
   const handleSelectDay = (day: DayOfWeek) => {
     setSelectedDay(day);
     const loaded = storageService.getItem<Record<string, number>>(
@@ -133,18 +106,15 @@ export const App: React.FC = () => {
     setDayPortions(loaded);
   };
 
-  // Portion Increment
   const handleIncrementPortion = (foodId: string) => {
     setDayPortions((prev) => {
       const current = prev[foodId] || 0;
       const next = { ...prev, [foodId]: current + 1 };
       storageService.setItem(`${STORAGE_KEYS.DAILY_PORTIONS}${selectedDay}`, next);
-      audioService.playAdd();
       return next;
     });
   };
 
-  // Portion Decrement
   const handleDecrementPortion = (foodId: string) => {
     setDayPortions((prev) => {
       const current = prev[foodId] || 0;
@@ -160,37 +130,25 @@ export const App: React.FC = () => {
     });
   };
 
-  // Quick Add from Canteen Supplement Drawer
   const handleQuickAddCanteen = (food: FoodItem) => {
     handleIncrementPortion(food.id);
-    audioService.playPowerSurge();
   };
 
-  // Reset current day's logs
   const handleResetDay = () => {
     if (window.confirm("Reset all meal logs for this day?")) {
       setDayPortions({});
       storageService.setItem(`${STORAGE_KEYS.DAILY_PORTIONS}${selectedDay}`, {});
-      audioService.playAlert();
     }
   };
 
-  // Apply OCR scanned schedule
   const handleApplyScannedSchedule = (scannedSchedule: any) => {
     setSchedule((prev) => {
       const updated = { ...prev, ...scannedSchedule };
       storageService.setItem(STORAGE_KEYS.SCHEDULE, updated);
       return updated;
     });
-    audioService.playLevelUp();
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
   };
 
-  // Compute Total Consumed Macros for selected day
   const consumedMacros = useMemo(() => {
     let calories = 0;
     let protein = 0;
@@ -220,24 +178,10 @@ export const App: React.FC = () => {
     };
   }, [dayPortions]);
 
-  // Deficit Analysis
   const deficitAnalysis = useMemo(() => {
     return calculatorService.calculateDeficit(profile.dailyTargets, consumedMacros);
   }, [profile.dailyTargets, consumedMacros]);
 
-  // Trigger celebration confetti when hitting 100% protein goal
-  useEffect(() => {
-    if (deficitAnalysis.proteinMetPercentage >= 100) {
-      audioService.playLevelUp();
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.5 },
-      });
-    }
-  }, [deficitAnalysis.proteinMetPercentage >= 100]);
-
-  // Helper to resolve FoodItems for each meal in current day's schedule
   const currentDaySchedule = schedule[selectedDay] || DEFAULT_WEEKLY_MESS_SCHEDULE[selectedDay];
 
   const getFoodsForIds = (ids: string[] = []): FoodItem[] => {
@@ -247,8 +191,8 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950 pb-16">
-      {/* 1. Header Profile & Goal Bar */}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans pb-16">
+      {/* Top Header */}
       <ProfileBar
         profile={profile}
         onUpdateProfile={handleUpdateProfile}
@@ -256,111 +200,86 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="max-w-6xl mx-auto w-full px-4 pt-5 space-y-6 flex-1">
-        {/* Top Control Bar: Scan Menu, Sound Toggle & Reset */}
+      <main className="max-w-5xl mx-auto w-full px-4 pt-6 space-y-6 flex-1">
+        {/* Controls */}
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            {/* Open Scanner CTA */}
-            <button
-              onClick={() => setIsScannerOpen(true)}
-              className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-gradient-to-r from-violet-600 via-fuchsia-600 to-cyan-500 hover:brightness-110 text-white shadow-[0_0_15px_rgba(139,92,246,0.35)] flex items-center gap-2 active:scale-95 transition-all"
-            >
-              <Camera className="w-4 h-4" />
-              <span>Smart Menu Scanner</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setIsScannerOpen(true)}
+            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs flex items-center gap-2 transition-colors active:scale-98"
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span>Upload Mess Menu</span>
+          </button>
 
-          <div className="flex items-center gap-2">
-            {/* Audio Toggle */}
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className={`p-2 rounded-xl border text-xs font-bold transition-all ${
-                soundEnabled
-                  ? 'bg-slate-900 border-cyan-500/40 text-cyan-400'
-                  : 'bg-slate-900 border-slate-800 text-slate-500'
-              }`}
-              title={soundEnabled ? 'Hype SFX Enabled' : 'SFX Muted'}
-            >
-              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-            </button>
-
-            {/* Reset day counts */}
-            <button
-              onClick={handleResetDay}
-              className="px-3 py-2 rounded-xl border border-slate-800 hover:border-rose-900 bg-slate-900/80 hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 text-xs font-bold transition-all flex items-center gap-1.5"
-              title="Reset today's logs"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reset Day</span>
-            </button>
-          </div>
+          <button
+            onClick={handleResetDay}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Clear Logs</span>
+          </button>
         </div>
 
-        {/* 2. Real-Time Deficit Gauge & Anime Power Level Meter */}
+        {/* Nutritional Balance & Deficit Gauge */}
         <DeficitGauge analysis={deficitAnalysis} />
 
-        {/* 3. 1-Click Campus Canteen Supplements Drawer */}
-        <CanteenDrawer
-          onQuickAdd={handleQuickAddCanteen}
-          activeCounts={dayPortions}
-        />
-
-        {/* 4. 7-Day Interactive Mess Calendar */}
+        {/* 7-Day Calendar Tabs */}
         <MessCalendarTabs
           selectedDay={selectedDay}
           onSelectDay={handleSelectDay}
           todayDay={todayDay}
         />
 
-        {/* 5. Four Meal Sections for Selected Day */}
+        {/* Meal Breakdown for Selected Day */}
         <div className="space-y-4">
           <MealSection
             category="breakfast"
-            title="Breakfast (नाश्ता)"
-            foodItems={getFoodsForIds(currentDaySchedule.breakfast)}
-            portionCounts={dayPortions}
+            foods={getFoodsForIds(currentDaySchedule.breakfast)}
+            dayPortions={dayPortions}
             onIncrement={handleIncrementPortion}
             onDecrement={handleDecrementPortion}
           />
 
           <MealSection
             category="lunch"
-            title="Lunch (दोपहर का भोजन)"
-            foodItems={getFoodsForIds(currentDaySchedule.lunch)}
-            portionCounts={dayPortions}
+            foods={getFoodsForIds(currentDaySchedule.lunch)}
+            dayPortions={dayPortions}
             onIncrement={handleIncrementPortion}
             onDecrement={handleDecrementPortion}
           />
 
           <MealSection
             category="snacks"
-            title="Evening Snacks & Fruit (चाय / नाश्ता)"
-            foodItems={getFoodsForIds(currentDaySchedule.snacks)}
-            portionCounts={dayPortions}
+            foods={getFoodsForIds(currentDaySchedule.snacks)}
+            dayPortions={dayPortions}
             onIncrement={handleIncrementPortion}
             onDecrement={handleDecrementPortion}
           />
 
           <MealSection
             category="dinner"
-            title="Dinner (रात का खाना)"
-            foodItems={getFoodsForIds(currentDaySchedule.dinner)}
-            portionCounts={dayPortions}
+            foods={getFoodsForIds(currentDaySchedule.dinner)}
+            dayPortions={dayPortions}
             onIncrement={handleIncrementPortion}
             onDecrement={handleDecrementPortion}
           />
         </div>
+
+        {/* Canteen & Outside Supplements */}
+        <CanteenDrawer
+          supplements={CANTEEN_SUPPLEMENTS}
+          onQuickAdd={handleQuickAddCanteen}
+          dayPortions={dayPortions}
+        />
       </main>
 
-      {/* Smart OCR Scanner Modal */}
+      {/* Menu Scanner Modal */}
       <ScannerModal
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
-        scannerService={scannerService}
         onApplySchedule={handleApplyScannedSchedule}
+        currentDay={selectedDay}
       />
     </div>
   );
 };
-
-export default App;

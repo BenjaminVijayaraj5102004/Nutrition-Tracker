@@ -1,173 +1,119 @@
 import React from 'react';
 import { DeficitAnalysis } from '../../../core/types/nutrition';
-import { Zap, AlertTriangle, ShieldCheck, Trophy, Sparkles } from 'lucide-react';
+import { AlertCircle, CheckCircle2, TrendingUp, Info } from 'lucide-react';
 
 interface DeficitGaugeProps {
   analysis: DeficitAnalysis;
 }
 
 export const DeficitGauge: React.FC<DeficitGaugeProps> = ({ analysis }) => {
-  const { target, consumed, deficit, proteinMetPercentage, caloriesMetPercentage, powerLevelTotal, rankBadge } = analysis;
+  const { target, consumed, deficit, proteinMetPercentage, caloriesMetPercentage } = analysis;
 
   const isProteinDeficit = deficit.protein > 0;
   const isCalorieDeficit = deficit.calories > 0;
 
   return (
-    <div className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 relative overflow-hidden shadow-xl backdrop-blur-md">
-      {/* Background Anime Energy Aura */}
-      <div className="absolute -right-16 -top-16 w-52 h-52 bg-gradient-to-br from-violet-600/10 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-      {/* Top Banner: Rank Badge & Power Level */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-2.5">
-          <div className={`px-3 py-1 rounded-xl bg-gradient-to-r ${rankBadge.color} text-slate-950 font-black text-xs md:text-sm uppercase tracking-wider flex items-center gap-1.5 ${rankBadge.glow}`}>
-            <Trophy className="w-4 h-4 text-slate-950 fill-slate-950" />
-            <span>{rankBadge.rank}</span>
-          </div>
-          <div>
-            <h2 className="text-white font-extrabold text-sm md:text-base tracking-wide flex items-center gap-1.5">
-              {rankBadge.title}
-            </h2>
-            <p className="text-[11px] text-slate-400 font-medium">{rankBadge.flairMessage}</p>
-          </div>
+    <div className="w-full paper-card p-5">
+      {/* Header title */}
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+            Daily Nutritional Balance
+          </h2>
+          <p className="text-xs text-slate-500">
+            Real-time calculation comparing mess meals against your target
+          </p>
         </div>
-
-        {/* Gamified Power Level Counter */}
-        <div className="bg-slate-950/90 border border-cyan-500/30 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
-          <Zap className="w-4 h-4 text-cyan-400 fill-cyan-400 animate-pulse" />
-          <div className="text-right">
-            <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider block">Power Level</span>
-            <span className="text-base font-black font-mono text-cyan-300">
-              {powerLevelTotal.toLocaleString()}
-            </span>
-          </div>
+        <div className="text-right">
+          <span className="text-xs font-medium text-slate-500">Protein Completion</span>
+          <p className="text-lg font-bold text-slate-900 leading-tight">
+            {proteinMetPercentage}%
+          </p>
         </div>
       </div>
 
-      {/* Primary Protein Gauge (Key Metric for College Hostel Bros) */}
-      <div className="mb-4 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
-        <div className="flex items-center justify-between text-xs mb-1.5">
-          <span className="font-bold text-cyan-300 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            Protein Power Bar ({consumed.protein}g / {target.protein}g)
-          </span>
-          <span className="font-extrabold font-mono text-cyan-400">
-            {proteinMetPercentage}%
+      {/* Main Protein Progress Bar */}
+      <div className="mb-4 bg-slate-50 border border-slate-200/80 p-3.5 rounded-xl">
+        <div className="flex items-center justify-between text-xs mb-1.5 font-medium text-slate-700">
+          <span>Protein Intake ({consumed.protein}g of {target.protein}g)</span>
+          <span className={isProteinDeficit ? 'text-amber-600 font-semibold' : 'text-emerald-600 font-semibold'}>
+            {isProteinDeficit ? `${deficit.protein}g remaining` : 'Target achieved'}
           </span>
         </div>
-        {/* Progress Track */}
-        <div className="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden p-0.5 border border-slate-700">
+        
+        {/* Progress track */}
+        <div className="w-full bg-slate-200/80 rounded-full h-2.5 overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-violet-500 via-cyan-400 to-emerald-400 transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.6)]"
+            className={`h-full rounded-full transition-all duration-300 ${
+              proteinMetPercentage >= 100 ? 'bg-emerald-500' : 'bg-indigo-600'
+            }`}
             style={{ width: `${Math.min(100, proteinMetPercentage)}%` }}
           />
         </div>
 
-        {/* Live Deficit Alert Banner */}
-        <div className="mt-2.5 flex items-center gap-2">
+        {/* Crisp Alert Banner */}
+        <div className="mt-2.5">
           {isProteinDeficit ? (
-            <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400 bg-rose-950/50 border border-rose-800/60 px-2.5 py-1 rounded-lg w-full">
-              <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+            <div className="flex items-center gap-2 text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
               <span>
-                Alert: Short by <strong>{deficit.protein}g protein!</strong> Fuel up with eggs, milk, or chana below!
+                You are short by <strong>{deficit.protein}g of protein</strong> today. Consider adding eggs, milk, or chana from the campus canteen below.
               </span>
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-950/50 border border-emerald-800/60 px-2.5 py-1 rounded-lg w-full">
-              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>
-                Protein goal smashed! +{Math.abs(deficit.protein)}g surplus! Anabolic state secured!
+                Protein target reached ({consumed.protein}g / {target.protein}g). Great job meeting your requirement!
               </span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Secondary Macro Grid (Calories, Carbs, Fats, Fiber) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+      {/* Macronutrient Breakdown Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         {/* Calories */}
-        <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
-          <div className="flex justify-between items-center text-[11px] text-slate-400 mb-1">
-            <span>Calories</span>
-            <span className="font-mono text-white font-bold">{caloriesMetPercentage}%</span>
+        <div className="paper-card-subtle p-3">
+          <span className="text-slate-500 block mb-0.5">Energy</span>
+          <div className="font-semibold text-slate-900 text-sm">
+            {consumed.calories} <span className="text-slate-400 font-normal text-xs">/ {target.calories} kcal</span>
           </div>
-          <div className="font-mono font-extrabold text-sm text-emerald-400">
-            {consumed.calories} <span className="text-[10px] text-slate-500 font-normal">/ {target.calories} kcal</span>
-          </div>
-          <div className="w-full bg-slate-800 rounded-full h-1.5 mt-1.5 overflow-hidden">
-            <div
-              className="bg-emerald-400 h-full rounded-full transition-all duration-300"
-              style={{ width: `${Math.min(100, caloriesMetPercentage)}%` }}
-            />
-          </div>
-          <div className="text-[10px] text-slate-400 mt-1">
-            {isCalorieDeficit ? `-${deficit.calories} kcal remaining` : `+${Math.abs(deficit.calories)} kcal extra`}
+          <div className="text-[11px] text-slate-500 mt-0.5">
+            {caloriesMetPercentage}% met
           </div>
         </div>
 
-        {/* Carbs */}
-        <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
-          <div className="flex justify-between items-center text-[11px] text-slate-400 mb-1">
-            <span>Carbs (Ki Energy)</span>
-            <span className="font-mono text-white font-bold">
-              {Math.round((consumed.carbs / Math.max(1, target.carbs)) * 100)}%
-            </span>
+        {/* Carbohydrates */}
+        <div className="paper-card-subtle p-3">
+          <span className="text-slate-500 block mb-0.5">Carbohydrates</span>
+          <div className="font-semibold text-slate-900 text-sm">
+            {consumed.carbs}g <span className="text-slate-400 font-normal text-xs">/ ~{target.carbs}g</span>
           </div>
-          <div className="font-mono font-extrabold text-sm text-amber-400">
-            {consumed.carbs}g <span className="text-[10px] text-slate-500 font-normal">/ {target.carbs}g</span>
-          </div>
-          <div className="w-full bg-slate-800 rounded-full h-1.5 mt-1.5 overflow-hidden">
-            <div
-              className="bg-amber-400 h-full rounded-full transition-all duration-300"
-              style={{ width: `${Math.min(100, (consumed.carbs / Math.max(1, target.carbs)) * 100)}%` }}
-            />
-          </div>
-          <div className="text-[10px] text-slate-400 mt-1">
-            {deficit.carbs > 0 ? `${deficit.carbs}g needed` : `Fulfilled`}
+          <div className="text-[11px] text-slate-500 mt-0.5">
+            Energy & glycogen
           </div>
         </div>
 
         {/* Fats */}
-        <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
-          <div className="flex justify-between items-center text-[11px] text-slate-400 mb-1">
-            <span>Healthy Fats</span>
-            <span className="font-mono text-white font-bold">
-              {Math.round((consumed.fats / Math.max(1, target.fats)) * 100)}%
-            </span>
+        <div className="paper-card-subtle p-3">
+          <span className="text-slate-500 block mb-0.5">Healthy Fats</span>
+          <div className="font-semibold text-slate-900 text-sm">
+            {consumed.fats}g <span className="text-slate-400 font-normal text-xs">/ ~{target.fats}g</span>
           </div>
-          <div className="font-mono font-extrabold text-sm text-rose-400">
-            {consumed.fats}g <span className="text-[10px] text-slate-500 font-normal">/ {target.fats}g</span>
-          </div>
-          <div className="w-full bg-slate-800 rounded-full h-1.5 mt-1.5 overflow-hidden">
-            <div
-              className="bg-rose-400 h-full rounded-full transition-all duration-300"
-              style={{ width: `${Math.min(100, (consumed.fats / Math.max(1, target.fats)) * 100)}%` }}
-            />
-          </div>
-          <div className="text-[10px] text-slate-400 mt-1">
-            {deficit.fats > 0 ? `${deficit.fats}g needed` : `Fulfilled`}
+          <div className="text-[11px] text-slate-500 mt-0.5">
+            Hormonal balance
           </div>
         </div>
 
         {/* Fiber */}
-        <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
-          <div className="flex justify-between items-center text-[11px] text-slate-400 mb-1">
-            <span>Fiber (Gut Armor)</span>
-            <span className="font-mono text-white font-bold">
-              {Math.round((consumed.fiber / Math.max(1, target.fiber)) * 100)}%
-            </span>
+        <div className="paper-card-subtle p-3">
+          <span className="text-slate-500 block mb-0.5">Dietary Fiber</span>
+          <div className="font-semibold text-slate-900 text-sm">
+            {consumed.fiber}g <span className="text-slate-400 font-normal text-xs">/ 30g goal</span>
           </div>
-          <div className="font-mono font-extrabold text-sm text-lime-400">
-            {consumed.fiber}g <span className="text-[10px] text-slate-500 font-normal">/ {target.fiber}g</span>
-          </div>
-          <div className="w-full bg-slate-800 rounded-full h-1.5 mt-1.5 overflow-hidden">
-            <div
-              className="bg-lime-400 h-full rounded-full transition-all duration-300"
-              style={{ width: `${Math.min(100, (consumed.fiber / Math.max(1, target.fiber)) * 100)}%` }}
-            />
-          </div>
-          <div className="text-[10px] text-slate-400 mt-1">
-            {deficit.fiber > 0 ? `${deficit.fiber}g needed` : `Fulfilled`}
+          <div className="text-[11px] text-slate-500 mt-0.5">
+            Digestion & satiety
           </div>
         </div>
       </div>
