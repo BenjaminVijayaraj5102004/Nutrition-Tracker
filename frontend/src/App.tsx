@@ -9,7 +9,10 @@ import {
   INDIAN_MESS_FOOD_DATABASE,
   CANTEEN_SUPPLEMENTS,
 } from './core/data/foodDatabase';
-import { DEFAULT_WEEKLY_MESS_SCHEDULE } from './core/data/defaultSchedule';
+import {
+  ALL_COMBINED_FOOD_DATABASE,
+  VIT_AP_WEEKLY_MESS_SCHEDULE,
+} from './core/data/vitApMenuDatabase';
 import { ServiceFactory } from './core/services/ServiceFactory';
 import { MessNutriApiClient } from './core/services/MessNutriApiClient';
 
@@ -27,8 +30,8 @@ import {
 
 const STORAGE_KEYS = {
   PROFILE: 'user_profile_v2',
-  SCHEDULE: 'weekly_mess_schedule_v2',
-  DAILY_PORTIONS: 'daily_portions_',
+  SCHEDULE: 'weekly_mess_schedule_vitap_v3',
+  DAILY_PORTIONS: 'daily_portions_v3_',
 };
 
 export const App: React.FC = () => {
@@ -37,7 +40,7 @@ export const App: React.FC = () => {
 
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
-  // Poll / check backend connection on load and every 10 seconds
+  // Poll backend connection
   useEffect(() => {
     let isMounted = true;
     const checkConnection = async () => {
@@ -72,10 +75,10 @@ export const App: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(todayDay);
 
   const [profile, setProfile] = useState<UserProfile>(() => {
-    const initialTargets = calculatorService.calculateDailyTargets(65, 172, 'male', 'muscle_gain');
+    const initialTargets = calculatorService.calculateDailyTargets(68, 175, 'male', 'muscle_gain');
     return storageService.getItem<UserProfile>(STORAGE_KEYS.PROFILE, {
-      weightKg: 65,
-      heightCm: 172,
+      weightKg: 68,
+      heightCm: 175,
       gender: 'male',
       goal: 'muscle_gain',
       activityLevel: 'moderate',
@@ -85,10 +88,11 @@ export const App: React.FC = () => {
     });
   });
 
+  // Default to VIT-AP official October schedule
   const [schedule, setSchedule] = useState<WeeklyMessSchedule>(() => {
     return storageService.getItem<WeeklyMessSchedule>(
       STORAGE_KEYS.SCHEDULE,
-      DEFAULT_WEEKLY_MESS_SCHEDULE
+      VIT_AP_WEEKLY_MESS_SCHEDULE
     );
   });
 
@@ -153,7 +157,7 @@ export const App: React.FC = () => {
   };
 
   const handleResetDay = () => {
-    if (window.confirm("Reset all meal logs for this day?")) {
+    if (window.confirm(`Reset all meal logs for ${selectedDay.toUpperCase()}?`)) {
       setDayPortions({});
       storageService.setItem(`${STORAGE_KEYS.DAILY_PORTIONS}${selectedDay}`, {});
     }
@@ -167,6 +171,7 @@ export const App: React.FC = () => {
     });
   };
 
+  // Compute nutrients using all combined dishes (standard + VIT-AP university menu)
   const consumedMacros = useMemo(() => {
     let calories = 0;
     let protein = 0;
@@ -176,7 +181,7 @@ export const App: React.FC = () => {
 
     Object.entries(dayPortions).forEach(([foodId, count]) => {
       if (count <= 0) return;
-      const food = INDIAN_MESS_FOOD_DATABASE.find((f) => f.id === foodId);
+      const food = ALL_COMBINED_FOOD_DATABASE.find((f) => f.id === foodId);
       if (food) {
         const portion = calculatorService.calculateFoodPortion(food, count);
         calories += portion.calories;
@@ -200,11 +205,11 @@ export const App: React.FC = () => {
     return calculatorService.calculateDeficit(profile.dailyTargets, consumedMacros);
   }, [profile.dailyTargets, consumedMacros]);
 
-  const currentDaySchedule = schedule[selectedDay] || DEFAULT_WEEKLY_MESS_SCHEDULE[selectedDay];
+  const currentDaySchedule = schedule[selectedDay] || VIT_AP_WEEKLY_MESS_SCHEDULE[selectedDay];
 
   const getFoodsForIds = (ids: string[] = []): FoodItem[] => {
     return ids
-      .map((id) => INDIAN_MESS_FOOD_DATABASE.find((f) => f.id === id))
+      .map((id) => ALL_COMBINED_FOOD_DATABASE.find((f) => f.id === id))
       .filter((f): f is FoodItem => !!f);
   };
 
@@ -223,11 +228,16 @@ export const App: React.FC = () => {
         {/* Top Controls Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 bg-white border-3 border-black p-3.5 shadow-[4px_4px_0_0_#000] rounded-xl">
           <div>
-            <h2 className="text-base font-black text-black uppercase tracking-tight">
-              HOSTEL NUTRITION TERMINAL
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-black text-black uppercase tracking-tight">
+                HOSTEL NUTRITION TERMINAL
+              </h2>
+              <span className="text-[10px] font-black uppercase bg-[#facc15] border border-black px-1.5 py-0.2">
+                VIT-AP OCTOBER ACTIVE
+              </span>
+            </div>
             <p className="text-xs font-bold text-black/60 uppercase">
-              LIVE NUTRITION RECONSTRUCTION & DEFICIT ANALYSIS
+              LIVE MENU SCHEDULE & NUTRITIONAL DEFICIT BREAKDOWN
             </p>
           </div>
 
