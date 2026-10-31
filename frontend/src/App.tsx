@@ -11,6 +11,7 @@ import {
 } from './core/data/foodDatabase';
 import { DEFAULT_WEEKLY_MESS_SCHEDULE } from './core/data/defaultSchedule';
 import { ServiceFactory } from './core/services/ServiceFactory';
+import { MessNutriApiClient } from './core/services/MessNutriApiClient';
 
 import { ProfileBar } from './modules/profile/components/ProfileBar';
 import { BentoOverview } from './modules/nutrition/components/BentoOverview';
@@ -33,6 +34,26 @@ const STORAGE_KEYS = {
 export const App: React.FC = () => {
   const storageService = ServiceFactory.getStorageService();
   const calculatorService = ServiceFactory.getCalculatorService();
+
+  const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
+
+  // Poll / check backend connection on load and every 10 seconds
+  useEffect(() => {
+    let isMounted = true;
+    const checkConnection = async () => {
+      const healthy = await MessNutriApiClient.checkHealth();
+      if (isMounted) {
+        setIsBackendConnected(healthy);
+      }
+    };
+
+    checkConnection();
+    const interval = setInterval(checkConnection, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   const getTodayDayOfWeek = (): DayOfWeek => {
     const days: DayOfWeek[] = [
@@ -194,6 +215,7 @@ export const App: React.FC = () => {
         profile={profile}
         onUpdateProfile={handleUpdateProfile}
         streak={profile.streakDays}
+        isBackendConnected={isBackendConnected}
       />
 
       {/* Main Container */}

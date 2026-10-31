@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { UserProfile, FitnessGoal } from '../../../core/types/nutrition';
-import { User, ChevronDown, ChevronUp, Flame, Zap } from 'lucide-react';
+import { User, ChevronDown, ChevronUp, Flame, Server } from 'lucide-react';
 
 interface ProfileBarProps {
   profile: UserProfile;
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   streak: number;
+  isBackendConnected: boolean;
 }
 
-export const ProfileBar: React.FC<ProfileBarProps> = ({ profile, onUpdateProfile, streak }) => {
+export const ProfileBar: React.FC<ProfileBarProps> = ({
+  profile,
+  onUpdateProfile,
+  streak,
+  isBackendConnected,
+}) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
@@ -28,9 +34,29 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({ profile, onUpdateProfile
                 <span className="text-[10px] font-black uppercase tracking-wider bg-black text-white px-2 py-0.5 rounded-sm">
                   NEO-BRUTAL
                 </span>
+                {/* Live Python Backend Status Badge */}
+                <span
+                  className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 border-2 border-black flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] ${
+                    isBackendConnected
+                      ? 'bg-[#86efac] text-black'
+                      : 'bg-white text-black'
+                  }`}
+                  title={
+                    isBackendConnected
+                      ? 'Connected to Python FastAPI Backend (Port 8000)'
+                      : 'Running in Client-Side Mode'
+                  }
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isBackendConnected ? 'bg-emerald-700 animate-pulse' : 'bg-amber-500'
+                    }`}
+                  />
+                  {isBackendConnected ? 'PYTHON ENGINE: CONNECTED' : 'CLIENT MODE'}
+                </span>
               </div>
               <p className="text-[11px] font-bold text-black/70 hidden sm:block">
-                Hostel Nutrition Balance & Canteen Fixes
+                Hostel Nutrition Balance & Canteen Intelligence
               </p>
             </div>
           </div>
