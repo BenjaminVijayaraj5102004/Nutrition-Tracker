@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserProfile, FitnessGoal } from '../../../core/types/nutrition';
-import { User, ChevronDown, ChevronUp, Activity, Check } from 'lucide-react';
+import { User, ChevronDown, ChevronUp, Activity, Flame, Shield } from 'lucide-react';
 
 interface ProfileBarProps {
   profile: UserProfile;
@@ -11,62 +11,43 @@ interface ProfileBarProps {
 export const ProfileBar: React.FC<ProfileBarProps> = ({ profile, onUpdateProfile, streak }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  const goalLabels: Record<FitnessGoal, string> = {
-    muscle_gain: 'Muscle Gain',
-    fat_loss: 'Fat Loss',
-    maintenance: 'Maintenance',
-  };
-
   return (
-    <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
-      <div className="max-w-5xl mx-auto px-4 py-3">
-        {/* Top Summary Bar */}
+    <header className="w-full bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30">
+      <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-3">
           {/* Logo & Product Name */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
-              <Activity className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+              MN
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold text-slate-900 tracking-tight">
+                <h1 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
                   MessNutri
                 </h1>
-                <span className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
-                  Hostel Edition
+                <span className="text-[10px] font-semibold tracking-wide text-slate-600 bg-slate-100 border border-slate-200/80 px-2 py-0.5 rounded-full">
+                  BENTO DASHBOARD
                 </span>
               </div>
-              <p className="text-xs text-slate-500">
-                Daily hostel nutrition & deficit tracker • {streak} day streak
+              <p className="text-[11px] text-slate-500 hidden sm:block">
+                Daily hostel nutrition balance & canteen intelligence
               </p>
             </div>
           </div>
 
           {/* Quick Metrics & Edit Drawer Button */}
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-4 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-lg text-xs text-slate-600">
-              <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400 block">Weight</span>
-                <span className="font-semibold text-slate-900">{profile.weightKg} kg</span>
-              </div>
-              <div className="w-px h-5 bg-slate-200" />
-              <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400 block">Target Energy</span>
-                <span className="font-semibold text-slate-900">{profile.dailyTargets.calories} kcal</span>
-              </div>
-              <div className="w-px h-5 bg-slate-200" />
-              <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400 block">Target Protein</span>
-                <span className="font-semibold text-indigo-600">{profile.dailyTargets.protein}g</span>
-              </div>
+            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200/70 px-2.5 py-1 rounded-lg text-xs text-amber-800 font-medium">
+              <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+              <span>{streak} Day Streak</span>
             </div>
 
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs active:bg-slate-100"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition-colors"
             >
               <User className="w-3.5 h-3.5 text-slate-500" />
-              <span>Edit Goals</span>
+              <span>{profile.weightKg} kg • Goal</span>
               {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-slate-400" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-400" />}
             </button>
           </div>

@@ -1,0 +1,132 @@
+import React from 'react';
+import { DeficitAnalysis } from '../../../core/types/nutrition';
+import { AlertCircle, CheckCircle2, TrendingUp, Zap, Target } from 'lucide-react';
+
+interface BentoOverviewProps {
+  analysis: DeficitAnalysis;
+  onOpenScanner: () => void;
+}
+
+export const BentoOverview: React.FC<BentoOverviewProps> = ({ analysis, onOpenScanner }) => {
+  const { target, consumed, deficit, proteinMetPercentage, caloriesMetPercentage } = analysis;
+  const isProteinDeficit = deficit.protein > 0;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5">
+      {/* 1. Large Hero Bento Cell: Protein Engine (Col span 7) */}
+      <div className="md:col-span-7 paper-card p-5 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md">
+              Primary Goal: Protein Target
+            </span>
+            <span className="text-xs font-semibold text-slate-500">
+              {proteinMetPercentage}% Achieved
+            </span>
+          </div>
+
+          <div className="flex items-baseline gap-2 mb-2">
+            <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              {consumed.protein}g
+            </span>
+            <span className="text-sm font-medium text-slate-400">
+              of {target.protein}g daily requirement
+            </span>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden mb-3">
+            <div
+              className={`h-full rounded-full transition-all duration-300 ${
+                proteinMetPercentage >= 100 ? 'bg-emerald-500' : 'bg-indigo-600'
+              }`}
+              style={{ width: `${Math.min(100, proteinMetPercentage)}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Actionable Status Callout */}
+        <div className="mt-2">
+          {isProteinDeficit ? (
+            <div className="flex items-start gap-2 text-xs text-amber-900 bg-amber-50 border border-amber-200/80 p-2.5 rounded-lg">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <span>
+                <strong>Deficit Alert:</strong> You need <strong>{deficit.protein}g more protein</strong> to hit your target today. Check the canteen section below for quick additions.
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-xs text-emerald-900 bg-emerald-50 border border-emerald-200/80 p-2.5 rounded-lg">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>
+                <strong>Target Complete:</strong> You have reached your daily protein requirement!
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 2. Secondary Bento Cell: Calories & Energy (Col span 5) */}
+      <div className="md:col-span-5 paper-card p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Energy Intake
+          </span>
+          <span className="text-xs font-bold text-slate-700">
+            {caloriesMetPercentage}%
+          </span>
+        </div>
+
+        <div className="my-1">
+          <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            {consumed.calories}
+          </span>
+          <span className="text-sm text-slate-400 font-medium ml-1.5">
+            / {target.calories} kcal
+          </span>
+        </div>
+
+        <div className="w-full bg-slate-100 rounded-full h-2 mb-3">
+          <div
+            className="h-full rounded-full bg-slate-800 transition-all duration-300"
+            style={{ width: `${Math.min(100, caloriesMetPercentage)}%` }}
+          />
+        </div>
+
+        <div className="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
+          <span>Maintenance Base</span>
+          <span className="font-semibold text-slate-700">Mifflin-St Jeor</span>
+        </div>
+      </div>
+
+      {/* 3. Bento Mini Stat: Carbs (Col span 4) */}
+      <div className="md:col-span-4 paper-card p-4">
+        <span className="text-[11px] font-medium text-slate-500 block mb-1">Carbohydrates</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-xl font-bold text-slate-900">{consumed.carbs}g</span>
+          <span className="text-xs text-slate-400">/ ~{target.carbs}g</span>
+        </div>
+        <p className="text-[11px] text-slate-500 mt-1">Hostel rice, rotis & grains</p>
+      </div>
+
+      {/* 4. Bento Mini Stat: Fats (Col span 4) */}
+      <div className="md:col-span-4 paper-card p-4">
+        <span className="text-[11px] font-medium text-slate-500 block mb-1">Dietary Fats</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-xl font-bold text-slate-900">{consumed.fats}g</span>
+          <span className="text-xs text-slate-400">/ ~{target.fats}g</span>
+        </div>
+        <p className="text-[11px] text-slate-500 mt-1">Ghee, dal tadka & gravies</p>
+      </div>
+
+      {/* 5. Bento Mini Stat: Fiber (Col span 4) */}
+      <div className="md:col-span-4 paper-card p-4">
+        <span className="text-[11px] font-medium text-slate-500 block mb-1">Dietary Fiber</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-xl font-bold text-slate-900">{consumed.fiber}g</span>
+          <span className="text-xs text-slate-400">/ 30g goal</span>
+        </div>
+        <p className="text-[11px] text-slate-500 mt-1">Vegetables & fresh fruits</p>
+      </div>
+    </div>
+  );
+};

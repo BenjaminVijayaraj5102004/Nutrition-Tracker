@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   DayOfWeek,
   UserProfile,
-  MealCategory,
   FoodItem,
   WeeklyMessSchedule,
 } from './core/types/nutrition';
@@ -14,7 +13,7 @@ import { DEFAULT_WEEKLY_MESS_SCHEDULE } from './core/data/defaultSchedule';
 import { ServiceFactory } from './core/services/ServiceFactory';
 
 import { ProfileBar } from './modules/profile/components/ProfileBar';
-import { DeficitGauge } from './modules/nutrition/components/DeficitGauge';
+import { BentoOverview } from './modules/nutrition/components/BentoOverview';
 import { MessCalendarTabs } from './modules/calendar/components/MessCalendarTabs';
 import { MealSection } from './modules/meals/components/MealSection';
 import { CanteenDrawer } from './modules/canteen/components/CanteenDrawer';
@@ -32,7 +31,6 @@ const STORAGE_KEYS = {
 };
 
 export const App: React.FC = () => {
-
   const storageService = ServiceFactory.getStorageService();
   const calculatorService = ServiceFactory.getCalculatorService();
 
@@ -46,8 +44,7 @@ export const App: React.FC = () => {
       'friday',
       'saturday',
     ];
-    const dayIndex = new Date().getDay();
-    return days[dayIndex];
+    return days[new Date().getDay()];
   };
 
   const todayDay = useMemo(() => getTodayDayOfWeek(), []);
@@ -200,28 +197,38 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="max-w-5xl mx-auto w-full px-4 pt-6 space-y-6 flex-1">
-        {/* Controls */}
+      <main className="max-w-6xl mx-auto w-full px-4 pt-6 space-y-6 flex-1">
+        {/* Top Controls Row */}
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <button
-            onClick={() => setIsScannerOpen(true)}
-            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs flex items-center gap-2 transition-colors active:scale-98"
-          >
-            <Camera className="w-3.5 h-3.5" />
-            <span>Upload Mess Menu</span>
-          </button>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight">Hostel Nutrition Dashboard</h2>
+            <p className="text-xs text-slate-500">Track your mess meals and optimize daily intake</p>
+          </div>
 
-          <button
-            onClick={handleResetDay}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Clear Logs</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsScannerOpen(true)}
+              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-2xs flex items-center gap-2 transition-colors"
+            >
+              <Camera className="w-3.5 h-3.5" />
+              <span>Upload Menu Photo</span>
+            </button>
+
+            <button
+              onClick={handleResetDay}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Clear</span>
+            </button>
+          </div>
         </div>
 
-        {/* Nutritional Balance & Deficit Gauge */}
-        <DeficitGauge analysis={deficitAnalysis} />
+        {/* Bento Grid: Nutritional Overview */}
+        <BentoOverview
+          analysis={deficitAnalysis}
+          onOpenScanner={() => setIsScannerOpen(true)}
+        />
 
         {/* 7-Day Calendar Tabs */}
         <MessCalendarTabs
@@ -230,8 +237,8 @@ export const App: React.FC = () => {
           todayDay={todayDay}
         />
 
-        {/* Meal Breakdown for Selected Day */}
-        <div className="space-y-4">
+        {/* Bento Grid for Today's Meals: 2x2 Clean Grid on Desktops */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <MealSection
             category="breakfast"
             foods={getFoodsForIds(currentDaySchedule.breakfast)}
@@ -265,7 +272,7 @@ export const App: React.FC = () => {
           />
         </div>
 
-        {/* Canteen & Outside Supplements */}
+        {/* Canteen & Outside Supplements Bento Shelf */}
         <CanteenDrawer
           supplements={CANTEEN_SUPPLEMENTS}
           onQuickAdd={handleQuickAddCanteen}
