@@ -2,63 +2,111 @@
 
 @layer base {
   :root {
-    --paper-bg: #f8fafc;
-    --paper-card: #ffffff;
-    --paper-border: #e2e8f0;
-    --paper-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-    --paper-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --neo-bg: #fffdf5;
+    --neo-black: #000000;
+    --neo-yellow: #facc15;
+    --neo-green: #4ade80;
+    --neo-cyan: #38bdf8;
+    --neo-violet: #a855f7;
+    --neo-rose: #fb7185;
   }
 
   body {
-    background-color: #f8fafc;
-    color: #0f172a;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background-color: #fffdf5;
+    color: #000000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Cabinet Grotesk", sans-serif;
     -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.011em;
   }
 }
 
-/* Paper-like subtle tactile styling */
-.paper-card {
+/* Neo-Brutalist Core Styles */
+.neo-card {
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px 0 rgba(15, 23, 42, 0.02);
-  border-radius: 14px;
-}
-
-.paper-card-subtle {
-  background-color: #fbfcfe;
-  border: 1px solid #edf2f7;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
   border-radius: 12px;
-}
-
-.paper-input {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  color: #0f172a;
-  border-radius: 8px;
   transition: all 0.15s ease-in-out;
 }
 
-.paper-input:focus {
-  outline: none;
-  background-color: #ffffff;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+.neo-card-subtle {
+  background-color: #fffdf5;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px 0px #000000;
+  border-radius: 10px;
 }
 
-/* Crisp Clean Scrollbars */
+.neo-card-accent-yellow {
+  background-color: #fef08a;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 12px;
+}
+
+.neo-card-accent-cyan {
+  background-color: #bae6fd;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 12px;
+}
+
+.neo-card-accent-green {
+  background-color: #bbf7d0;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 12px;
+}
+
+.neo-btn {
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px 0px #000000;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: all 0.1s ease-in-out;
+}
+
+.neo-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #000000;
+}
+
+.neo-input {
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px 0px #000000;
+  color: #000000;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.1s ease-in-out;
+}
+
+.neo-input:focus {
+  outline: none;
+  background-color: #fef9c3;
+  box-shadow: 3px 3px 0px 0px #000000;
+}
+
+.neo-badge {
+  border: 2px solid #000000;
+  box-shadow: 1.5px 1.5px 0px 0px #000000;
+  font-weight: 800;
+  border-radius: 6px;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #fef08a;
+  border-left: 2px solid #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #000000;
+  border-radius: 0px;
 }

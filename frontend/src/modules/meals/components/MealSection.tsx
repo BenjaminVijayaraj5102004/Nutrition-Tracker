@@ -13,27 +13,31 @@ interface MealSectionProps {
 
 const CATEGORY_META: Record<
   MealCategory,
-  { title: string; subtitle: string; icon: React.ReactNode }
+  { title: string; subtitle: string; bg: string; icon: React.ReactNode }
 > = {
   breakfast: {
-    title: 'Breakfast',
+    title: 'BREAKFAST',
     subtitle: '7:30 AM – 9:30 AM',
-    icon: <Coffee className="w-4 h-4 text-amber-600" />,
+    bg: '#fef08a',
+    icon: <Coffee className="w-4 h-4 text-black stroke-[2.5]" />,
   },
   lunch: {
-    title: 'Lunch',
+    title: 'LUNCH',
     subtitle: '12:30 PM – 2:30 PM',
-    icon: <Sun className="w-4 h-4 text-orange-500" />,
+    bg: '#fed7aa',
+    icon: <Sun className="w-4 h-4 text-black stroke-[2.5]" />,
   },
   snacks: {
-    title: 'Evening Snacks',
+    title: 'EVENING SNACKS',
     subtitle: '4:45 PM – 6:15 PM',
-    icon: <Utensils className="w-4 h-4 text-indigo-500" />,
+    bg: '#e9d5ff',
+    icon: <Utensils className="w-4 h-4 text-black stroke-[2.5]" />,
   },
   dinner: {
-    title: 'Dinner',
+    title: 'DINNER',
     subtitle: '7:45 PM – 9:45 PM',
-    icon: <Moon className="w-4 h-4 text-sky-600" />,
+    bg: '#bae6fd',
+    icon: <Moon className="w-4 h-4 text-black stroke-[2.5]" />,
   },
 };
 
@@ -47,21 +51,28 @@ export const MealSection: React.FC<MealSectionProps> = ({
   const meta = CATEGORY_META[category];
 
   return (
-    <section className="paper-card p-4 sm:p-5">
+    <section className="bg-white border-4 border-black p-4 sm:p-5 shadow-[6px_6px_0px_0px_#000] rounded-xl">
       {/* Meal Header */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+      <div className="flex items-center justify-between pb-3 mb-3 border-b-2 border-black">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center">
+          <div
+            className="w-8 h-8 border-2 border-black flex items-center justify-center shadow-[2px_2px_0_0_#000]"
+            style={{ backgroundColor: meta.bg }}
+          >
             {meta.icon}
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-900">{meta.title}</h3>
-            <p className="text-[11px] text-slate-500">{meta.subtitle}</p>
+            <h3 className="text-sm font-black text-black tracking-tight uppercase">
+              {meta.title}
+            </h3>
+            <p className="text-[10px] font-bold text-black/60 uppercase">
+              {meta.subtitle}
+            </p>
           </div>
         </div>
 
-        <span className="text-xs text-slate-500 font-medium">
-          {foods.length} items on schedule
+        <span className="text-[11px] font-black uppercase bg-black text-white px-2 py-0.5">
+          {foods.length} ITEMS
         </span>
       </div>
 
@@ -79,8 +90,8 @@ export const MealSection: React.FC<MealSectionProps> = ({
           ))}
         </div>
       ) : (
-        <div className="text-center py-6 text-xs text-slate-400">
-          No items scheduled for this meal.
+        <div className="text-center py-6 text-xs font-bold text-black/40 uppercase">
+          NO ITEMS SCHEDULED FOR THIS MEAL.
         </div>
       )}
     </section>

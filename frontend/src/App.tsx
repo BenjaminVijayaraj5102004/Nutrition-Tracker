@@ -188,7 +188,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans pb-16">
+    <div className="min-h-screen bg-[#fffdf5] text-black flex flex-col font-sans pb-16">
       {/* Top Header */}
       <ProfileBar
         profile={profile}
@@ -199,32 +199,36 @@ export const App: React.FC = () => {
       {/* Main Container */}
       <main className="max-w-6xl mx-auto w-full px-4 pt-6 space-y-6 flex-1">
         {/* Top Controls Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-white border-3 border-black p-3.5 shadow-[4px_4px_0_0_#000] rounded-xl">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">Hostel Nutrition Dashboard</h2>
-            <p className="text-xs text-slate-500">Track your mess meals and optimize daily intake</p>
+            <h2 className="text-base font-black text-black uppercase tracking-tight">
+              HOSTEL NUTRITION TERMINAL
+            </h2>
+            <p className="text-xs font-bold text-black/60 uppercase">
+              LIVE NUTRITION RECONSTRUCTION & DEFICIT ANALYSIS
+            </p>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsScannerOpen(true)}
-              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-2xs flex items-center gap-2 transition-colors"
+              className="px-4 py-2 bg-[#facc15] hover:bg-[#eab308] text-black border-2 border-black font-black text-xs uppercase neo-btn flex items-center gap-2"
             >
-              <Camera className="w-3.5 h-3.5" />
-              <span>Upload Menu Photo</span>
+              <Camera className="w-4 h-4 stroke-[2.5]" />
+              <span>IMPORT MENU</span>
             </button>
 
             <button
               onClick={handleResetDay}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-100 text-black border-2 border-black font-black text-xs uppercase neo-btn"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Clear</span>
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>RESET</span>
             </button>
           </div>
         </div>
 
-        {/* Bento Grid: Nutritional Overview */}
+        {/* Bento Overview with Neo-Brutalist styling */}
         <BentoOverview
           analysis={deficitAnalysis}
           onOpenScanner={() => setIsScannerOpen(true)}
@@ -237,7 +241,7 @@ export const App: React.FC = () => {
           todayDay={todayDay}
         />
 
-        {/* Bento Grid for Today's Meals: 2x2 Clean Grid on Desktops */}
+        {/* Meals 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <MealSection
             category="breakfast"

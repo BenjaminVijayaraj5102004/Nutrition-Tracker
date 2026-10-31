@@ -4,11 +4,8 @@ import {
   X,
   Check,
   Camera,
-  FileText,
-  FileSpreadsheet,
-  Link2,
-  Sparkles,
   ClipboardPaste,
+  Sparkles,
 } from 'lucide-react';
 import { ServiceFactory } from '../../../core/services/ServiceFactory';
 import { DayOfWeek } from '../../../core/types/nutrition';
@@ -21,7 +18,7 @@ interface ScannerModalProps {
   currentDay: DayOfWeek;
 }
 
-type UploadTab = 'image' | 'paste' | 'preset' | 'pdf_csv';
+type UploadTab = 'image' | 'paste' | 'preset';
 
 const CAMPUS_PRESETS = [
   {
@@ -54,13 +51,11 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
 
   const scannerService = ServiceFactory.getScannerService();
   const [activeTab, setActiveTab] = useState<UploadTab>('image');
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [extractedRawText, setExtractedRawText] = useState<string>('');
   const [detectedDishes, setDetectedDishes] = useState<string[]>([]);
   const [scannedDays, setScannedDays] = useState<any>(null);
 
-  // Raw text paste input state
   const [pastedMenuText, setPastedMenuText] = useState<string>(
     'Monday:\nBreakfast: Poha, Milk, Banana\nLunch: Roti, Rice, Dal Tadka, Curd\nSnacks: Apple\nDinner: Roti, Steamed Rice, Chole Masala'
   );
@@ -69,28 +64,22 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async () => {
-      setImagePreview(reader.result as string);
-      setIsProcessing(true);
+    setIsProcessing(true);
+    try {
+      const result = await scannerService.scanMenuImage(file);
+      setExtractedRawText(result.rawText);
+      setScannedDays(result.detectedDays);
 
-      try {
-        const result = await scannerService.scanMenuImage(file);
-        setExtractedRawText(result.rawText);
-        setScannedDays(result.detectedDays);
-
-        const dishNames = result.matchedFoodIds.map((id) => {
-          const item = INDIAN_MESS_FOOD_DATABASE.find((f) => f.id === id);
-          return item ? item.name : id;
-        });
-        setDetectedDishes(dishNames);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsProcessing(false);
-      }
-    };
-    reader.readAsDataURL(file);
+      const dishNames = result.matchedFoodIds.map((id) => {
+        const item = INDIAN_MESS_FOOD_DATABASE.find((f) => f.id === id);
+        return item ? item.name : id;
+      });
+      setDetectedDishes(dishNames);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleParseText = () => {
@@ -172,68 +161,68 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="bg-white rounded-2xl border border-slate-200 max-w-xl w-full p-5 sm:p-6 shadow-xl relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-100">
+      <div className="bg-[#fffdf5] rounded-xl border-4 border-black max-w-xl w-full p-5 sm:p-6 shadow-[8px_8px_0_0_#000] relative max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b-3 border-black">
           <div>
-            <h3 className="text-base font-semibold text-slate-900">
-              Import Hostel Mess Menu
+            <h3 className="text-base font-black text-black uppercase tracking-tight">
+              IMPORT HOSTEL MESS MENU
             </h3>
-            <p className="text-xs text-slate-500">
-              Multiple methods to import your weekly or daily hostel mess chart
+            <p className="text-xs font-bold text-black/60 uppercase">
+              PHOTO UPLOAD, TEXT PARSE, OR CAMPUS PRESETS
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+            className="p-1 border-2 border-black bg-white hover:bg-slate-100 text-black shadow-[2px_2px_0_0_#000]"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 stroke-[2.5]" />
           </button>
         </div>
 
         {/* Method Switcher Tabs */}
-        <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl mb-4 text-xs font-medium">
+        <div className="grid grid-cols-3 gap-2 mb-4">
           <button
             onClick={() => setActiveTab('image')}
-            className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-2 px-2 text-xs font-black uppercase border-2 border-black transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'image'
-                ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#facc15] text-black shadow-[3px_3px_0_0_#000]'
+                : 'bg-white text-black hover:bg-slate-100 shadow-[1.5px_1.5px_0_0_#000]'
             }`}
           >
-            <Camera className="w-3.5 h-3.5" />
-            <span>Photo / File</span>
+            <Camera className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>PHOTO / FILE</span>
           </button>
 
           <button
             onClick={() => setActiveTab('paste')}
-            className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-2 px-2 text-xs font-black uppercase border-2 border-black transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'paste'
-                ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#bae6fd] text-black shadow-[3px_3px_0_0_#000]'
+                : 'bg-white text-black hover:bg-slate-100 shadow-[1.5px_1.5px_0_0_#000]'
             }`}
           >
-            <ClipboardPaste className="w-3.5 h-3.5" />
-            <span>Paste Text</span>
+            <ClipboardPaste className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>PASTE TEXT</span>
           </button>
 
           <button
             onClick={() => setActiveTab('preset')}
-            className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-2 px-2 text-xs font-black uppercase border-2 border-black transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'preset'
-                ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#bbf7d0] text-black shadow-[3px_3px_0_0_#000]'
+                : 'bg-white text-black hover:bg-slate-100 shadow-[1.5px_1.5px_0_0_#000]'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Presets</span>
+            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>PRESETS</span>
           </button>
         </div>
 
         {/* Tab 1: Image & Camera Upload */}
         {activeTab === 'image' && (
-          <div className="border-2 border-dashed border-slate-200 rounded-xl p-5 text-center bg-slate-50 hover:bg-slate-100/60 transition-colors cursor-pointer relative mb-4">
+          <div className="border-3 border-dashed border-black rounded-lg p-5 text-center bg-white hover:bg-[#fef9c3] transition-colors cursor-pointer relative mb-4 shadow-[4px_4px_0_0_#000]">
             <input
               type="file"
               accept="image/*,.pdf"
@@ -241,15 +230,15 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
               className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
             />
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                <Upload className="w-5 h-5" />
+              <div className="w-12 h-12 bg-[#facc15] border-2 border-black flex items-center justify-center shadow-[2px_2px_0_0_#000]">
+                <Upload className="w-6 h-6 text-black stroke-[2.5]" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-800">
-                  Take photo, browse image, or drop file
+                <p className="text-xs font-black uppercase text-black">
+                  UPLOAD PHOTO, CAMERA SNAP, OR PDF
                 </p>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  Supports Camera capture, JPG, PNG, or PDF mess notice
+                <p className="text-[11px] font-bold text-black/60 mt-0.5 uppercase">
+                  SUPPORTS JPG, PNG, WEBP, OR NOTICEBOARD PDF
                 </p>
               </div>
             </div>
@@ -259,46 +248,46 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
         {/* Tab 2: Paste WhatsApp / Notice Text */}
         {activeTab === 'paste' && (
           <div className="space-y-2 mb-4">
-            <label className="block text-xs font-medium text-slate-700">
-              Paste Mess Menu Text (from WhatsApp, College Notice or Email):
+            <label className="block text-xs font-black uppercase text-black">
+              PASTE WHATSAPP / NOTICEBOARD TEXT:
             </label>
             <textarea
               rows={4}
               value={pastedMenuText}
               onChange={(e) => setPastedMenuText(e.target.value)}
               placeholder="e.g. Monday: Roti, Dal, Rice, Paneer, Curd, Banana..."
-              className="w-full p-2.5 paper-input text-xs font-mono"
+              className="w-full p-2.5 neo-input text-xs font-mono"
             />
             <button
               onClick={handleParseText}
-              className="w-full py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white hover:bg-slate-900 transition-colors"
+              className="w-full py-2 bg-black text-[#facc15] font-black text-xs uppercase neo-btn"
             >
-              Parse Menu Text
+              PARSE MENU TEXT
             </button>
           </div>
         )}
 
         {/* Tab 3: University Common Presets */}
         {activeTab === 'preset' && (
-          <div className="space-y-2 mb-4">
-            <p className="text-xs text-slate-500 mb-2">
-              Select your university mess template for instant setup:
+          <div className="space-y-2.5 mb-4">
+            <p className="text-xs font-bold uppercase text-black/70 mb-1">
+              SELECT A STANDARD INDIAN HOSTEL TEMPLATE:
             </p>
             {CAMPUS_PRESETS.map((preset) => (
               <div
                 key={preset.id}
                 onClick={() => handleApplyPreset(preset.id)}
-                className="p-3 border border-slate-200 rounded-xl hover:border-indigo-400 hover:bg-indigo-50/30 transition-all cursor-pointer flex items-center justify-between"
+                className="p-3 bg-white border-3 border-black shadow-[3px_3px_0_0_#000] hover:bg-[#fef9c3] transition-all cursor-pointer flex items-center justify-between"
               >
                 <div>
-                  <h4 className="text-xs font-semibold text-slate-900">{preset.title}</h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{preset.desc}</p>
+                  <h4 className="text-xs font-black uppercase text-black">{preset.title}</h4>
+                  <p className="text-[11px] font-bold text-black/70 mt-0.5">{preset.desc}</p>
                 </div>
                 <div className="flex gap-1">
                   {preset.tags.map((t, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded"
+                      className="text-[9px] font-black uppercase bg-black text-white px-1.5 py-0.5"
                     >
                       {t}
                     </span>
@@ -311,24 +300,24 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
 
         {/* Processing State */}
         {isProcessing && (
-          <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-center text-xs text-indigo-700 mb-4 animate-pulse">
-            Analyzing and matching food items with Indian nutrition database...
+          <div className="p-3 bg-[#fef08a] border-3 border-black font-black text-xs uppercase text-black mb-4 shadow-[3px_3px_0_0_#000] animate-pulse">
+            ANALYZING & MATCHING WITH NUTRITION DATABASE...
           </div>
         )}
 
         {/* Results Preview */}
         {extractedRawText && (
-          <div className="space-y-2 mb-4 pt-2 border-t border-slate-100">
-            <label className="block text-xs font-medium text-slate-700">
-              Matched Dishes ({detectedDishes.length} identified):
+          <div className="space-y-2 mb-4 pt-3 border-t-2 border-black">
+            <label className="block text-xs font-black uppercase text-black">
+              DETECTED DISHES ({detectedDishes.length} MATCHES):
             </label>
-            <div className="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl max-h-28 overflow-y-auto">
+            <div className="flex flex-wrap gap-1.5 p-2 bg-white border-2 border-black max-h-28 overflow-y-auto">
               {detectedDishes.map((dish, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1 text-xs bg-white border border-slate-200 text-slate-800 px-2 py-0.5 rounded-md shadow-2xs"
+                  className="inline-flex items-center gap-1 text-xs font-black uppercase bg-[#bbf7d0] border border-black px-2 py-0.5"
                 >
-                  <Check className="w-3 h-3 text-emerald-600" />
+                  <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-800" />
                   {dish}
                 </span>
               ))}
@@ -337,23 +326,23 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
         )}
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-black">
           <button
             onClick={onClose}
-            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 border border-slate-200"
+            className="px-4 py-2 border-2 border-black bg-white text-black font-black text-xs uppercase neo-btn"
           >
-            Cancel
+            CANCEL
           </button>
           <button
             onClick={handleConfirmAndApply}
             disabled={!extractedRawText}
-            className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            className={`px-4 py-2 border-2 border-black font-black text-xs uppercase neo-btn ${
               extractedRawText
-                ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-2xs'
-                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                ? 'bg-[#22c55e] text-black shadow-[3px_3px_0_0_#000]'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed border-slate-400 shadow-none'
             }`}
           >
-            Apply to Schedule
+            APPLY TO SCHEDULE
           </button>
         </div>
       </div>
