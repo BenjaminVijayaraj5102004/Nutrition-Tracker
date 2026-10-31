@@ -105,38 +105,9 @@ export const App: React.FC = () => {
     );
   });
 
-  // Custom External / Food Street items persisted in storage
+  // Custom External / Food Street items persisted in storage (starts empty until user uploads menu card/PDF)
   const [externalFoods, setExternalFoods] = useState<FoodItem[]>(() => {
-    return storageService.getItem<FoodItem[]>(STORAGE_KEYS.EXTERNAL_ITEMS, [
-      {
-        id: 'ext_tandoori_chicken_preset',
-        name: 'Food Street Tandoori Chicken (4 Pcs)',
-        calories: 520,
-        protein: 60.0,
-        carbs: 6.0,
-        fats: 26.0,
-        fiber: 1.0,
-        defaultServing: '1 plate (4 pcs)',
-        servingUnit: 'plate',
-        category: 'canteen',
-        isVeg: false,
-        powerLevel: 600,
-      },
-      {
-        id: 'ext_chicken_shawarma_preset',
-        name: 'Campus Shawarma Roll (Double Chicken)',
-        calories: 420,
-        protein: 26.0,
-        carbs: 38.0,
-        fats: 16.0,
-        fiber: 2.0,
-        defaultServing: '1 roll',
-        servingUnit: 'roll',
-        category: 'canteen',
-        isVeg: false,
-        powerLevel: 260,
-      },
-    ]);
+    return storageService.getItem<FoodItem[]>(STORAGE_KEYS.EXTERNAL_ITEMS, []);
   });
 
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
