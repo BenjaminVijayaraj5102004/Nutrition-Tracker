@@ -1,89 +1,112 @@
 import React, { useState } from 'react';
 import { UserProfile, FitnessGoal } from '../../../core/types/nutrition';
-import { User, ChevronDown, ChevronUp, Flame, Server } from 'lucide-react';
+import { User, ChevronDown, ChevronUp, Flame, Sun, Moon, Laptop } from 'lucide-react';
+
+export type ThemeMode = 'light' | 'dark' | 'system';
 
 interface ProfileBarProps {
   profile: UserProfile;
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   streak: number;
-  isBackendConnected: boolean;
+  theme: ThemeMode;
+  onThemeChange: (theme: ThemeMode) => void;
 }
 
 export const ProfileBar: React.FC<ProfileBarProps> = ({
   profile,
   onUpdateProfile,
   streak,
-  isBackendConnected,
+  theme,
+  onThemeChange,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
-    <header className="w-full bg-[#fef08a] border-b-4 border-black sticky top-0 z-30 shadow-[0_4px_0_0_#000]">
+    <header className="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs transition-colors">
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-3">
           {/* Logo & Product Name */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-black text-[#facc15] flex items-center justify-center font-black text-lg border-2 border-black shadow-[2px_2px_0_0_#000] rotate-[-2deg]">
+            <div className="w-9 h-9 bg-indigo-600 text-white flex items-center justify-center font-bold text-sm rounded-xl shadow-xs">
               MN
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-lg font-black text-black tracking-tight uppercase">
+                <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   MessNutri
                 </h1>
-                <span className="text-[10px] font-black uppercase tracking-wider bg-black text-white px-2 py-0.5 rounded-sm">
-                  NEO-BRUTAL
-                </span>
-                {/* Live Python Backend Status Badge */}
-                <span
-                  className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 border-2 border-black flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] ${
-                    isBackendConnected
-                      ? 'bg-[#86efac] text-black'
-                      : 'bg-white text-black'
-                  }`}
-                  title={
-                    isBackendConnected
-                      ? 'Connected to Python FastAPI Backend (Port 8000)'
-                      : 'Running in Client-Side Mode'
-                  }
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      isBackendConnected ? 'bg-emerald-700 animate-pulse' : 'bg-amber-500'
-                    }`}
-                  />
-                  {isBackendConnected ? 'PYTHON ENGINE: CONNECTED' : 'CLIENT MODE'}
+                <span className="text-[10px] font-semibold tracking-wide text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full">
+                  HOSTEL EDITION
                 </span>
               </div>
-              <p className="text-[11px] font-bold text-black/70 hidden sm:block">
-                Hostel Nutrition Balance & Canteen Intelligence
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
+                Daily hostel nutrition tracking & smart deficit analysis
               </p>
             </div>
           </div>
 
-          {/* Quick Metrics & Edit Drawer Button */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-white border-2 border-black px-3 py-1 font-black text-xs text-black shadow-[2px_2px_0_0_#000]">
-              <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
-              <span>{streak} DAY STREAK</span>
+          {/* Quick Metrics, Theme Toggle & Profile Button */}
+          <div className="flex items-center gap-2.5">
+            {/* Streak Counter */}
+            <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 px-2.5 py-1 rounded-lg text-xs text-amber-800 dark:text-amber-300 font-medium">
+              <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+              <span>{streak}d Streak</span>
             </div>
 
+            {/* Light / Dark / System Theme Switcher */}
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 text-slate-600 dark:text-slate-300">
+              <button
+                onClick={() => onThemeChange('light')}
+                className={`p-1.5 rounded-md transition-colors ${
+                  theme === 'light'
+                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+                title="Light Mode"
+              >
+                <Sun className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => onThemeChange('dark')}
+                className={`p-1.5 rounded-md transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-slate-700 text-white shadow-2xs font-semibold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+                title="Dark Mode"
+              >
+                <Moon className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => onThemeChange('system')}
+                className={`p-1.5 rounded-md transition-colors ${
+                  theme === 'system'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs font-semibold'
+                    : 'hover:text-slate-900 dark:hover:text-white'
+                }`}
+                title="System Mode"
+              >
+                <Laptop className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Profile Drawer Toggle */}
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#67e8f9] hover:bg-[#38bdf8] text-black border-2 border-black font-black text-xs neo-btn uppercase"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-medium shadow-2xs transition-colors"
             >
-              <User className="w-3.5 h-3.5" />
-              <span>{profile.weightKg}KG • STATS</span>
-              {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              <User className="w-3.5 h-3.5 text-slate-500" />
+              <span>{profile.weightKg}kg • Goal</span>
+              {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
           </div>
         </div>
 
         {/* Expandable Goals Drawer */}
         {isExpanded && (
-          <div className="mt-3 pt-3 border-t-2 border-black grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs animate-in fade-in duration-100">
+          <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs animate-in fade-in duration-100">
             <div>
-              <label className="block text-black font-black uppercase tracking-wider text-[10px] mb-1">
+              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
                 Body Weight (kg)
               </label>
               <input
@@ -92,12 +115,12 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 max="180"
                 value={profile.weightKg}
                 onChange={(e) => onUpdateProfile({ weightKg: Number(e.target.value) || 60 })}
-                className="w-full px-2.5 py-1.5 neo-input"
+                className="w-full px-2.5 py-1.5 app-input"
               />
             </div>
 
             <div>
-              <label className="block text-black font-black uppercase tracking-wider text-[10px] mb-1">
+              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
                 Height (cm)
               </label>
               <input
@@ -106,18 +129,18 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 max="230"
                 value={profile.heightCm}
                 onChange={(e) => onUpdateProfile({ heightCm: Number(e.target.value) || 170 })}
-                className="w-full px-2.5 py-1.5 neo-input"
+                className="w-full px-2.5 py-1.5 app-input"
               />
             </div>
 
             <div>
-              <label className="block text-black font-black uppercase tracking-wider text-[10px] mb-1">
+              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
                 Gender
               </label>
               <select
                 value={profile.gender}
                 onChange={(e) => onUpdateProfile({ gender: e.target.value as any })}
-                className="w-full px-2.5 py-1.5 neo-input"
+                className="w-full px-2.5 py-1.5 app-input"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -125,13 +148,13 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
             </div>
 
             <div>
-              <label className="block text-black font-black uppercase tracking-wider text-[10px] mb-1">
+              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
                 Fitness Goal
               </label>
               <select
                 value={profile.goal}
                 onChange={(e) => onUpdateProfile({ goal: e.target.value as FitnessGoal })}
-                className="w-full px-2.5 py-1.5 neo-input"
+                className="w-full px-2.5 py-1.5 app-input"
               >
                 <option value="muscle_gain">Muscle Gain (+15%)</option>
                 <option value="maintenance">Maintenance</option>

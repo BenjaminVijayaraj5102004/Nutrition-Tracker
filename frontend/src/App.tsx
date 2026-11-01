@@ -6,21 +6,15 @@ import {
   WeeklyMessSchedule,
 } from './core/types/nutrition';
 import {
-  INDIAN_MESS_FOOD_DATABASE,
-  CANTEEN_SUPPLEMENTS,
-} from './core/data/foodDatabase';
-import {
   ALL_COMBINED_FOOD_DATABASE,
   VIT_AP_WEEKLY_MESS_SCHEDULE,
 } from './core/data/vitApMenuDatabase';
 import { ServiceFactory } from './core/services/ServiceFactory';
-import { MessNutriApiClient } from './core/services/MessNutriApiClient';
 
-import { ProfileBar } from './modules/profile/components/ProfileBar';
+import { ProfileBar, ThemeMode } from './modules/profile/components/ProfileBar';
 import { BentoOverview } from './modules/nutrition/components/BentoOverview';
 import { MessCalendarTabs } from './modules/calendar/components/MessCalendarTabs';
-import { MealSection } from './modules/meals/components/MealSection';
-import { CanteenDrawer } from './modules/canteen/components/CanteenDrawer';
+import { MealSwipeCarousel } from './modules/meals/components/MealSwipeCarousel';
 import { ExternalFoodsSection } from './modules/canteen/components/ExternalFoodsSection';
 import { ScannerModal } from './modules/scanner/components/ScannerModal';
 
@@ -34,31 +28,45 @@ const STORAGE_KEYS = {
   SCHEDULE: 'weekly_mess_schedule_vitap_v3',
   DAILY_PORTIONS: 'daily_portions_v3_',
   EXTERNAL_ITEMS: 'external_foods_custom_v3',
+  THEME: 'messnutri_theme_mode',
 };
 
 export const App: React.FC = () => {
   const storageService = ServiceFactory.getStorageService();
   const calculatorService = ServiceFactory.getCalculatorService();
 
-  const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
+  // Theme Management (Light, Dark, System)
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    return storageService.getItem<ThemeMode>(STORAGE_KEYS.THEME, 'system');
+  });
 
-  // Poll backend connection
   useEffect(() => {
-    let isMounted = true;
-    const checkConnection = async () => {
-      const healthy = await MessNutriApiClient.checkHealth();
-      if (isMounted) {
-        setIsBackendConnected(healthy);
+    const root = document.documentElement;
+    const applyTheme = (isDark: boolean) => {
+      if (isDark) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
       }
     };
 
-    checkConnection();
-    const interval = setInterval(checkConnection, 10000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, []);
+    if (theme === 'dark') {
+      applyTheme(true);
+    } else if (theme === 'light') {
+      applyTheme(false);
+    } else {
+      // System preference check
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(systemDark);
+
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = (e: MediaQueryListEvent) => applyTheme(e.matches);
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+
+    storageService.setItem(STORAGE_KEYS.THEME, theme);
+  }, [theme]);
 
   const getTodayDayOfWeek = (): DayOfWeek => {
     const days: DayOfWeek[] = [
@@ -105,7 +113,7 @@ export const App: React.FC = () => {
     );
   });
 
-  // Custom External / Food Street items persisted in storage (starts empty until user uploads menu card/PDF)
+  // External / Canteen / Food Street items persisted in storage
   const [externalFoods, setExternalFoods] = useState<FoodItem[]>(() => {
     return storageService.getItem<FoodItem[]>(STORAGE_KEYS.EXTERNAL_ITEMS, []);
   });
@@ -159,10 +167,6 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleQuickAddCanteen = (food: FoodItem) => {
-    handleIncrementPortion(food.id);
-  };
-
   const handleAddExternalItem = (item: FoodItem) => {
     setExternalFoods((prev) => {
       const updated = [item, ...prev];
@@ -178,7 +182,6 @@ export const App: React.FC = () => {
       return updated;
     });
 
-    // Remove from logged portions if currently selected
     if (dayPortions[id]) {
       setDayPortions((prev) => {
         const copy = { ...prev };
@@ -204,16 +207,15 @@ export const App: React.FC = () => {
     });
   };
 
-  // Build combined pool of all items: standard Indian, VIT-AP university menu, plus user custom external foods
+  // Combine items map for instant lookup
   const allFoodsMap = useMemo(() => {
     const map = new Map<string, FoodItem>();
     ALL_COMBINED_FOOD_DATABASE.forEach((f) => map.set(f.id, f));
-    CANTEEN_SUPPLEMENTS.forEach((f) => map.set(f.id, f));
     externalFoods.forEach((f) => map.set(f.id, f));
     return map;
   }, [externalFoods]);
 
-  // Compute nutrients using all logged portions
+  // Compute nutrients
   const consumedMacros = useMemo(() => {
     let calories = 0;
     let protein = 0;
@@ -255,54 +257,64 @@ export const App: React.FC = () => {
       .filter((f): f is FoodItem => !!f);
   };
 
+  const resolvedScheduleForDay = useMemo(() => {
+    return {
+      breakfast: getFoodsForIds(currentDaySchedule.breakfast),
+      lunch: getFoodsForIds(currentDaySchedule.lunch),
+      snacks: getFoodsForIds(currentDaySchedule.snacks),
+      dinner: getFoodsForIds(currentDaySchedule.dinner),
+    };
+  }, [currentDaySchedule, allFoodsMap]);
+
   return (
-    <div className="min-h-screen bg-[#fffdf5] text-black flex flex-col font-sans pb-16">
+    <div className="min-h-screen flex flex-col font-sans pb-16 transition-colors">
       {/* Top Header */}
       <ProfileBar
         profile={profile}
         onUpdateProfile={handleUpdateProfile}
         streak={profile.streakDays}
-        isBackendConnected={isBackendConnected}
+        theme={theme}
+        onThemeChange={setTheme}
       />
 
       {/* Main Container */}
       <main className="max-w-6xl mx-auto w-full px-4 pt-6 space-y-6 flex-1">
-        {/* Top Controls Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-white border-3 border-black p-3.5 shadow-[4px_4px_0_0_#000] rounded-xl">
+        {/* Controls Row */}
+        <div className="flex flex-wrap items-center justify-between gap-3 app-card p-3.5">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-black uppercase tracking-tight">
-                HOSTEL NUTRITION TERMINAL
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Hostel Nutrition Dashboard
               </h2>
-              <span className="text-[10px] font-black uppercase bg-[#facc15] border border-black px-1.5 py-0.2">
-                VIT-AP OCTOBER ACTIVE
+              <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 px-2 py-0.5 rounded-full">
+                VIT-AP Active
               </span>
             </div>
-            <p className="text-xs font-bold text-black/60 uppercase">
-              LIVE MENU SCHEDULE & NUTRITIONAL DEFICIT BREAKDOWN
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Live menu schedule & personal deficit breakdown
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsScannerOpen(true)}
-              className="px-4 py-2 bg-[#facc15] hover:bg-[#eab308] text-black border-2 border-black font-black text-xs uppercase neo-btn flex items-center gap-2"
+              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium text-xs flex items-center gap-2 transition-colors shadow-2xs"
             >
-              <Camera className="w-4 h-4 stroke-[2.5]" />
-              <span>IMPORT MENU</span>
+              <Camera className="w-3.5 h-3.5" />
+              <span>Import Mess Menu</span>
             </button>
 
             <button
               onClick={handleResetDay}
-              className="flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-100 text-black border-2 border-black font-black text-xs uppercase neo-btn"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg font-medium text-xs transition-colors"
             >
-              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>RESET</span>
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset</span>
             </button>
           </div>
         </div>
 
-        {/* Bento Overview with Neo-Brutalist styling */}
+        {/* Nutritional Overview Card Grid */}
         <BentoOverview
           analysis={deficitAnalysis}
           onOpenScanner={() => setIsScannerOpen(true)}
@@ -315,40 +327,13 @@ export const App: React.FC = () => {
           todayDay={todayDay}
         />
 
-        {/* Meals 2x2 Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <MealSection
-            category="breakfast"
-            foods={getFoodsForIds(currentDaySchedule.breakfast)}
-            dayPortions={dayPortions}
-            onIncrement={handleIncrementPortion}
-            onDecrement={handleDecrementPortion}
-          />
-
-          <MealSection
-            category="lunch"
-            foods={getFoodsForIds(currentDaySchedule.lunch)}
-            dayPortions={dayPortions}
-            onIncrement={handleIncrementPortion}
-            onDecrement={handleDecrementPortion}
-          />
-
-          <MealSection
-            category="snacks"
-            foods={getFoodsForIds(currentDaySchedule.snacks)}
-            dayPortions={dayPortions}
-            onIncrement={handleIncrementPortion}
-            onDecrement={handleDecrementPortion}
-          />
-
-          <MealSection
-            category="dinner"
-            foods={getFoodsForIds(currentDaySchedule.dinner)}
-            dayPortions={dayPortions}
-            onIncrement={handleIncrementPortion}
-            onDecrement={handleDecrementPortion}
-          />
-        </div>
+        {/* Clean Swipeable Meal Carousel (No Long Messy Scrolling) */}
+        <MealSwipeCarousel
+          scheduleForDay={resolvedScheduleForDay}
+          dayPortions={dayPortions}
+          onIncrement={handleIncrementPortion}
+          onDecrement={handleDecrementPortion}
+        />
 
         {/* External Foods, Campus Canteen & Food Street (Pure Upload & Scan Driven) */}
         <ExternalFoodsSection
