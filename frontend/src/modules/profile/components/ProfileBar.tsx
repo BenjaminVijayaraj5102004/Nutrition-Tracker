@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserProfile, FitnessGoal } from '../../../core/types/nutrition';
-import { User, ChevronDown, ChevronUp, Flame, Sun, Moon, Laptop } from 'lucide-react';
+import { User, ChevronDown, ChevronUp, Flame, Sun, Moon, Laptop, Sparkles } from 'lucide-react';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -22,80 +22,91 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
-    <header className="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs transition-colors">
+    <header className="w-full bg-[var(--card-surface)] border-b border-[var(--card-border)] backdrop-blur-xl sticky top-0 z-30 transition-colors">
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-3">
-          {/* Logo & Product Name */}
+          {/* Logo & Product Name (Neo-Futurist Clean Glow) */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-indigo-600 text-white flex items-center justify-center font-bold text-sm rounded-xl shadow-xs">
-              MN
+            <div className="relative group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-violet-500 to-cyan-400 p-[1.5px] shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+                <div className="w-full h-full bg-[var(--card-surface)] rounded-[10px] flex items-center justify-center font-bold text-sm text-[var(--text-primary)]">
+                  MN
+                </div>
+              </div>
             </div>
+
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                <h1 className="text-base font-bold tracking-tight text-[var(--text-primary)]">
                   MessNutri
                 </h1>
-                <span className="text-[10px] font-semibold tracking-wide text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full">
-                  HOSTEL EDITION
+                <span className="text-[10px] font-semibold tracking-wider text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-200 dark:border-cyan-800/60 px-2 py-0.5 rounded-full">
+                  CAMPUS INTELLIGENCE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
-                Daily hostel nutrition tracking & smart deficit analysis
+              <p className="text-[11px] text-[var(--text-muted)] hidden sm:block">
+                Precision hostel nutrition balance & deficit tracking
               </p>
             </div>
           </div>
 
           {/* Quick Metrics, Theme Toggle & Profile Button */}
           <div className="flex items-center gap-2.5">
-            {/* Streak Counter */}
-            <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 px-2.5 py-1 rounded-lg text-xs text-amber-800 dark:text-amber-300 font-medium">
-              <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+            {/* Streak Counter with Subtle Glow */}
+            <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg text-xs text-amber-600 dark:text-amber-400 font-medium">
+              <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
               <span>{streak}d Streak</span>
             </div>
 
-            {/* Light / Dark / System Theme Switcher */}
-            <div className="flex items-center bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 text-slate-600 dark:text-slate-300">
+            {/* Neo-Futuristic Light / Dark / Auto Segmented Switcher */}
+            <div className="flex items-center bg-[var(--card-border)]/40 p-1 rounded-xl border border-[var(--card-border)] text-[var(--text-muted)] gap-1">
               <button
+                type="button"
                 onClick={() => onThemeChange('light')}
-                className={`p-1.5 rounded-md transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                   theme === 'light'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-white text-indigo-950 shadow-xs border border-slate-200'
+                    : 'hover:text-[var(--text-primary)] hover:bg-[var(--card-border)]/30'
                 }`}
                 title="Light Mode"
               >
-                <Sun className="w-3.5 h-3.5" />
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span className="hidden sm:inline">Light</span>
               </button>
               <button
+                type="button"
                 onClick={() => onThemeChange('dark')}
-                className={`p-1.5 rounded-md transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                   theme === 'dark'
-                    ? 'bg-slate-700 text-white shadow-2xs font-semibold'
-                    : 'hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-indigo-950/80 text-cyan-300 shadow-[0_0_10px_rgba(99,102,241,0.25)] border border-indigo-500/40'
+                    : 'hover:text-[var(--text-primary)] hover:bg-[var(--card-border)]/30'
                 }`}
                 title="Dark Mode"
               >
-                <Moon className="w-3.5 h-3.5" />
+                <Moon className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden sm:inline">Dark</span>
               </button>
               <button
+                type="button"
                 onClick={() => onThemeChange('system')}
-                className={`p-1.5 rounded-md transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                   theme === 'system'
-                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs font-semibold'
-                    : 'hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.3)]'
+                    : 'hover:text-[var(--text-primary)] hover:bg-[var(--card-border)]/30'
                 }`}
-                title="System Mode"
+                title="Auto / System Mode"
               >
                 <Laptop className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Auto</span>
               </button>
             </div>
 
             {/* Profile Drawer Toggle */}
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-medium shadow-2xs transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--card-surface)] hover:bg-[var(--card-border)]/50 text-[var(--text-primary)] border border-[var(--card-border)] rounded-lg text-xs font-medium shadow-xs transition-colors"
             >
-              <User className="w-3.5 h-3.5 text-slate-500" />
+              <User className="w-3.5 h-3.5 text-indigo-500" />
               <span>{profile.weightKg}kg • Goal</span>
               {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
@@ -104,9 +115,9 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
 
         {/* Expandable Goals Drawer */}
         {isExpanded && (
-          <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs animate-in fade-in duration-100">
+          <div className="mt-3 pt-3 border-t border-[var(--card-border)] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs animate-in fade-in duration-150">
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
+              <label className="block text-[var(--text-secondary)] font-medium mb-1">
                 Body Weight (kg)
               </label>
               <input
@@ -115,12 +126,12 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 max="180"
                 value={profile.weightKg}
                 onChange={(e) => onUpdateProfile({ weightKg: Number(e.target.value) || 60 })}
-                className="w-full px-2.5 py-1.5 app-input"
+                className="w-full px-2.5 py-1.5 futurism-input"
               />
             </div>
 
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
+              <label className="block text-[var(--text-secondary)] font-medium mb-1">
                 Height (cm)
               </label>
               <input
@@ -129,18 +140,18 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
                 max="230"
                 value={profile.heightCm}
                 onChange={(e) => onUpdateProfile({ heightCm: Number(e.target.value) || 170 })}
-                className="w-full px-2.5 py-1.5 app-input"
+                className="w-full px-2.5 py-1.5 futurism-input"
               />
             </div>
 
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
+              <label className="block text-[var(--text-secondary)] font-medium mb-1">
                 Gender
               </label>
               <select
                 value={profile.gender}
                 onChange={(e) => onUpdateProfile({ gender: e.target.value as any })}
-                className="w-full px-2.5 py-1.5 app-input"
+                className="w-full px-2.5 py-1.5 futurism-input"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -148,13 +159,13 @@ export const ProfileBar: React.FC<ProfileBarProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 font-medium mb-1">
+              <label className="block text-[var(--text-secondary)] font-medium mb-1">
                 Fitness Goal
               </label>
               <select
                 value={profile.goal}
                 onChange={(e) => onUpdateProfile({ goal: e.target.value as FitnessGoal })}
-                className="w-full px-2.5 py-1.5 app-input"
+                className="w-full px-2.5 py-1.5 futurism-input"
               >
                 <option value="muscle_gain">Muscle Gain (+15%)</option>
                 <option value="maintenance">Maintenance</option>

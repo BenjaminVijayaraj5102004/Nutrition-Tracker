@@ -45,8 +45,10 @@ export const App: React.FC = () => {
     const applyTheme = (isDark: boolean) => {
       if (isDark) {
         root.classList.add('dark');
+        root.setAttribute('data-theme', 'dark');
       } else {
         root.classList.remove('dark');
+        root.setAttribute('data-theme', 'light');
       }
     };
 
@@ -56,10 +58,9 @@ export const App: React.FC = () => {
       applyTheme(false);
     } else {
       // System preference check
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      applyTheme(systemDark);
-
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      applyTheme(mediaQuery.matches);
+
       const listener = (e: MediaQueryListEvent) => applyTheme(e.matches);
       mediaQuery.addEventListener('change', listener);
       return () => mediaQuery.removeEventListener('change', listener);
@@ -280,17 +281,17 @@ export const App: React.FC = () => {
       {/* Main Container */}
       <main className="max-w-6xl mx-auto w-full px-4 pt-6 space-y-6 flex-1">
         {/* Controls Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3 app-card p-3.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 futurism-card p-3.5">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              <h2 className="text-base font-bold text-[var(--text-primary)] tracking-tight">
                 Hostel Nutrition Dashboard
               </h2>
-              <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-semibold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/50 border border-cyan-200 dark:border-cyan-800 px-2 py-0.5 rounded-full">
                 VIT-AP Active
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[var(--text-muted)]">
               Live menu schedule & personal deficit breakdown
             </p>
           </div>
@@ -298,7 +299,7 @@ export const App: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsScannerOpen(true)}
-              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium text-xs flex items-center gap-2 transition-colors shadow-2xs"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white rounded-xl font-medium text-xs flex items-center gap-2 transition-all shadow-[0_0_12px_rgba(99,102,241,0.25)]"
             >
               <Camera className="w-3.5 h-3.5" />
               <span>Import Mess Menu</span>
@@ -306,7 +307,7 @@ export const App: React.FC = () => {
 
             <button
               onClick={handleResetDay}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg font-medium text-xs transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--card-surface)] hover:bg-[var(--card-hover)] text-[var(--text-secondary)] border border-[var(--card-border)] rounded-xl font-medium text-xs transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
