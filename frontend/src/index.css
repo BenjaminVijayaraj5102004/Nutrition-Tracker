@@ -4,28 +4,34 @@
 
 @layer base {
   :root {
-    --bg-page: #f8fafc;
-    --card-surface: rgba(255, 255, 255, 0.88);
-    --card-border: rgba(226, 232, 240, 0.9);
-    --card-hover: rgba(241, 245, 249, 0.6);
-    --text-primary: #0f172a;
-    --text-secondary: #334155;
-    --text-muted: #64748b;
-    --glow-cyan: rgba(6, 182, 212, 0.15);
-    --glow-indigo: rgba(99, 102, 241, 0.12);
+    --bg-page: #fbfbfa;
+    --card-surface: #ffffff;
+    --card-border: #000000;
+    --card-shadow: #000000;
+    --text-primary: #000000;
+    --text-secondary: #27272a;
+    --text-muted: #52525b;
+    --neo-yellow: #facc15;
+    --neo-cyan: #22d3ee;
+    --neo-lime: #4ade80;
+    --neo-orange: #fb923c;
+    --neo-pink: #f472b6;
     color-scheme: light;
   }
 
   html.dark, :root.dark, [data-theme="dark"], .dark {
-    --bg-page: #07090e;
-    --card-surface: rgba(15, 21, 33, 0.82);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --card-hover: rgba(255, 255, 255, 0.04);
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --glow-cyan: rgba(6, 182, 212, 0.25);
-    --glow-indigo: rgba(99, 102, 241, 0.2);
+    --bg-page: #0f1117;
+    --card-surface: #181b22;
+    --card-border: #ffffff;
+    --card-shadow: #ffffff;
+    --text-primary: #ffffff;
+    --text-secondary: #e4e4e7;
+    --text-muted: #a1a1aa;
+    --neo-yellow: #fde047;
+    --neo-cyan: #38bdf8;
+    --neo-lime: #4ade80;
+    --neo-orange: #fb923c;
+    --neo-pink: #f472b6;
     color-scheme: dark;
   }
 
@@ -36,65 +42,102 @@
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.015em;
     min-height: 100vh;
-    transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 }
 
-/* Neo-Futurism Glass Cards */
-.futurism-card {
+/* Neo-Brutalist Card (Interactive with Hard Shadow) */
+.neo-card {
   background-color: var(--card-surface);
-  border: 1px solid var(--card-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 0 1px 1px var(--card-border);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2.5px solid var(--card-border);
+  box-shadow: 4px 4px 0px var(--card-shadow);
+  border-radius: 14px;
+  transition: all 0.12s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dark .futurism-card {
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+.neo-card:hover {
+  box-shadow: 5px 5px 0px var(--card-shadow);
+  transform: translate(-1px, -1px);
 }
 
-.futurism-card:hover {
-  border-color: rgba(99, 102, 241, 0.35);
-}
-
-/* Sub-panels inside cards */
-.futurism-panel {
-  background-color: rgba(241, 245, 249, 0.7);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-}
-
-.dark .futurism-panel {
-  background-color: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.07);
-}
-
-/* Inputs */
-.futurism-input {
+/* Neo-Brutalist Static Container */
+.neo-card-static {
   background-color: var(--card-surface);
-  border: 1px solid var(--card-border);
+  border: 2.5px solid var(--card-border);
+  box-shadow: 4px 4px 0px var(--card-shadow);
+  border-radius: 14px;
+}
+
+/* Neo-Brutalist Tactile Button */
+.neo-btn {
+  border: 2px solid var(--card-border);
+  box-shadow: 3px 3px 0px var(--card-shadow);
+  font-weight: 800;
+  border-radius: 10px;
+  transition: all 0.1s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.neo-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--card-shadow);
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--card-shadow);
+}
+
+/* Neo-Brutalist Mini Badge */
+.neo-badge {
+  border: 1.5px solid var(--card-border);
+  box-shadow: 1.5px 1.5px 0px var(--card-shadow);
+  font-weight: 800;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+/* Neo-Brutalist Sub-panel */
+.neo-panel {
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.dark .neo-panel {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Neo-Brutalist Inputs & Selects */
+.neo-input {
+  background-color: var(--card-surface);
+  border: 2px solid var(--card-border);
   color: var(--text-primary);
   border-radius: 10px;
-  backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
+  box-shadow: 2.5px 2.5px 0px var(--card-shadow);
+  transition: all 0.12s ease;
+  font-weight: 700;
 }
 
-.futurism-input:focus {
+.neo-input:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 3.5px 3.5px 0px var(--neo-yellow);
+  transform: translate(-1px, -1px);
 }
 
-.futurism-input option {
-  background-color: #0f172a;
-  color: #f8fafc;
+.neo-input option {
+  background-color: #181b22;
+  color: #ffffff;
+  font-weight: 600;
 }
 
-html:not(.dark) .futurism-input option {
+html:not(.dark) .neo-input option {
   background-color: #ffffff;
-  color: #0f172a;
+  color: #000000;
+  font-weight: 600;
 }
 
 /* Scrollbar */

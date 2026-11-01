@@ -26,17 +26,17 @@ export const MessCalendarTabs: React.FC<MessCalendarTabsProps> = ({
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)]">
-          <Calendar className="w-4 h-4 text-indigo-500" />
+        <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--text-primary)]">
+          <Calendar className="w-4 h-4 text-amber-500 stroke-[2.5]" />
           <span>7-Day Rotation Schedule</span>
         </div>
-        <span className="text-xs text-[var(--text-muted)] font-medium">
-          Active: <strong className="text-[var(--text-primary)] capitalize">{todayDay}</strong> (Today)
+        <span className="text-xs text-[var(--text-muted)] font-bold">
+          Active: <strong className="text-[var(--text-primary)] font-black capitalize bg-yellow-400/30 px-1.5 py-0.5 rounded border border-[var(--card-border)]">{todayDay}</strong> (Today)
         </span>
       </div>
 
-      {/* Segmented Day Tab Bar */}
-      <div className="flex items-center gap-1.5 p-1 bg-[var(--card-surface)] rounded-2xl border border-[var(--card-border)] backdrop-blur-md overflow-x-auto no-scrollbar">
+      {/* Segmented Day Tab Bar (Neo-Brutal) */}
+      <div className="flex items-center gap-1.5 p-1.5 neo-card-static overflow-x-auto no-scrollbar">
         {DAYS.map(({ key, short }) => {
           const isSelected = selectedDay === key;
           const isToday = todayDay === key;
@@ -45,15 +45,15 @@ export const MessCalendarTabs: React.FC<MessCalendarTabsProps> = ({
             <button
               key={key}
               onClick={() => onSelectDay(key)}
-              className={`flex-1 min-w-[70px] py-1.5 px-2 text-xs font-medium rounded-xl transition-all text-center relative ${
+              className={`flex-1 min-w-[70px] py-2 px-2 text-xs rounded-xl transition-all text-center relative cursor-pointer ${
                 isSelected
-                  ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-semibold shadow-[0_0_12px_rgba(99,102,241,0.25)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--card-border)]/40'
+                  ? 'bg-yellow-400 text-black font-black border-2 border-[var(--card-border)] shadow-[2.5px_2.5px_0px_var(--card-shadow)] -translate-y-0.5'
+                  : 'bg-transparent hover:bg-black/5 dark:hover:bg-white/5 font-bold border-2 border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               <span>{short}</span>
               {isToday && (
-                <span className={`block w-1.5 h-1.5 rounded-full mx-auto mt-0.5 ${isSelected ? 'bg-white' : 'bg-indigo-500'}`} />
+                <span className={`block w-1.5 h-1.5 rounded-full mx-auto mt-0.5 ${isSelected ? 'bg-black' : 'bg-yellow-400'}`} />
               )}
             </button>
           );

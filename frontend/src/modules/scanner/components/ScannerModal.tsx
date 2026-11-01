@@ -172,35 +172,35 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="futurism-card bg-[var(--card-surface)] border border-[var(--card-border)] max-w-xl w-full p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-150">
+      <div className="neo-card-static bg-[var(--card-surface)] border-3 border-[var(--card-border)] shadow-[8px_8px_0px_var(--card-shadow)] max-w-xl w-full p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 mb-4 border-b border-[var(--card-border)]">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-[var(--card-border)]">
           <div>
-            <h3 className="text-base font-bold text-[var(--text-primary)]">
+            <h3 className="text-base font-black text-[var(--text-primary)]">
               Import University Mess Menu
             </h3>
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs font-bold text-[var(--text-muted)]">
               Auto-detects VIT-AP October Menu & campus staples
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--card-border)]"
+            className="w-7 h-7 rounded-lg border-2 border-[var(--card-border)] shadow-[1.5px_1.5px_0px_var(--card-shadow)] flex items-center justify-center font-black text-xs hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
 
         {/* Target Day Selector */}
-        <div className="mb-4 bg-[var(--card-border)]/20 border border-[var(--card-border)] p-2.5 rounded-xl flex items-center justify-between">
-          <label className="text-xs font-semibold text-[var(--text-primary)]">
+        <div className="mb-4 bg-black/5 dark:bg-white/5 border-2 border-[var(--card-border)] p-2.5 rounded-xl flex items-center justify-between">
+          <label className="text-xs font-black text-[var(--text-primary)]">
             Apply to Schedule Day:
           </label>
           <select
             value={targetDay}
             onChange={(e) => setTargetDay(e.target.value as DayOfWeek)}
-            className="px-2.5 py-1 border border-[var(--card-border)] font-semibold text-xs rounded-lg bg-[var(--card-surface)] text-[var(--text-primary)]"
+            className="px-2.5 py-1 border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] font-black text-xs rounded-lg bg-[var(--card-surface)] text-[var(--text-primary)]"
           >
             <option value="saturday">Saturday (Today)</option>
             <option value="sunday">Sunday</option>
@@ -213,47 +213,47 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
         </div>
 
         {/* Method Switcher Tabs */}
-        <div className="grid grid-cols-3 gap-2 mb-4 bg-[var(--card-border)]/20 p-1 rounded-xl">
+        <div className="grid grid-cols-3 gap-2 mb-4 bg-black/5 dark:bg-white/5 p-1 rounded-xl border-2 border-[var(--card-border)]">
           <button
             onClick={() => setActiveTab('image')}
-            className={`py-2 px-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            className={`py-2 px-2 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               activeTab === 'image'
-                ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-xs'
+                ? 'bg-yellow-400 text-black border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] -translate-y-0.5'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Camera className="w-3.5 h-3.5" />
+            <Camera className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>Photo / File</span>
           </button>
 
           <button
             onClick={() => setActiveTab('paste')}
-            className={`py-2 px-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            className={`py-2 px-2 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               activeTab === 'paste'
-                ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-xs'
+                ? 'bg-yellow-400 text-black border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] -translate-y-0.5'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <ClipboardPaste className="w-3.5 h-3.5" />
+            <ClipboardPaste className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>Paste Text</span>
           </button>
 
           <button
             onClick={() => setActiveTab('preset')}
-            className={`py-2 px-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            className={`py-2 px-2 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
               activeTab === 'preset'
-                ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-xs'
+                ? 'bg-yellow-400 text-black border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] -translate-y-0.5'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>Presets</span>
           </button>
         </div>
 
         {/* Tab 1: Image & Camera Upload */}
         {activeTab === 'image' && (
-          <div className="border border-dashed border-[var(--card-border)] rounded-xl p-6 text-center bg-[var(--card-border)]/15 hover:bg-[var(--card-border)]/25 transition-colors cursor-pointer relative mb-4">
+          <div className="border-2 border-dashed border-[var(--card-border)] rounded-xl p-6 text-center bg-black/5 dark:bg-white/5 hover:bg-yellow-400/10 transition-colors cursor-pointer relative mb-4">
             <input
               type="file"
               accept="image/*,.pdf,.xlsx,.csv,.txt"
@@ -261,14 +261,14 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
               className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
             />
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-cyan-500/10 text-cyan-500 flex items-center justify-center">
-                <Upload className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-xl bg-cyan-400 text-black border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] flex items-center justify-center font-black">
+                <Upload className="w-5 h-5 stroke-[2.5]" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-[var(--text-primary)]">
+                <p className="text-xs font-black text-[var(--text-primary)]">
                   Upload Menu Screenshot, Photo or PDF
                 </p>
-                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                <p className="text-[11px] font-bold text-[var(--text-muted)] mt-0.5">
                   Identifies exact dishes for {targetDay.toUpperCase()}
                 </p>
               </div>
@@ -279,18 +279,18 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
         {/* Tab 2: Paste Notice Text */}
         {activeTab === 'paste' && (
           <div className="space-y-2 mb-4">
-            <label className="block text-xs font-semibold text-[var(--text-primary)]">
+            <label className="block text-xs font-black text-[var(--text-primary)]">
               Paste Menu Text from WhatsApp or Noticeboard:
             </label>
             <textarea
               rows={4}
               value={pastedMenuText}
               onChange={(e) => setPastedMenuText(e.target.value)}
-              className="w-full p-2.5 futurism-input text-xs font-mono"
+              className="w-full p-2.5 neo-input text-xs font-mono"
             />
             <button
               onClick={handleParseText}
-              className="w-full py-2 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-semibold text-xs rounded-xl shadow-xs"
+              className="w-full py-2 bg-yellow-400 text-black font-black border-2 border-[var(--card-border)] shadow-[2.5px_2.5px_0px_var(--card-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none rounded-xl text-xs cursor-pointer"
             >
               Parse Dishes
             </button>
@@ -300,24 +300,24 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
         {/* Tab 3: Presets */}
         {activeTab === 'preset' && (
           <div className="space-y-2.5 mb-4">
-            <p className="text-xs text-[var(--text-muted)] mb-1">
+            <p className="text-xs font-bold text-[var(--text-muted)] mb-1">
               Select your university mess menu template:
             </p>
             {CAMPUS_PRESETS.map((preset) => (
               <div
                 key={preset.id}
                 onClick={() => handleApplyPreset(preset.id)}
-                className="p-3 bg-[var(--card-border)]/20 border border-[var(--card-border)] rounded-xl hover:border-indigo-500/40 transition-all cursor-pointer flex items-center justify-between"
+                className="p-3 bg-[var(--card-surface)] border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] rounded-xl hover:-translate-y-0.5 transition-all cursor-pointer flex items-center justify-between"
               >
                 <div>
-                  <h4 className="text-xs font-semibold text-[var(--text-primary)]">{preset.title}</h4>
-                  <p className="text-[11px] text-[var(--text-muted)] mt-0.5">{preset.desc}</p>
+                  <h4 className="text-xs font-black text-[var(--text-primary)]">{preset.title}</h4>
+                  <p className="text-[11px] font-bold text-[var(--text-muted)] mt-0.5">{preset.desc}</p>
                 </div>
                 <div className="flex gap-1">
                   {preset.tags.map((t, idx) => (
                     <span
                       key={idx}
-                      className="text-[9px] font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 px-2 py-0.5 rounded-full"
+                      className="text-[9px] font-black bg-cyan-300 text-black border border-[var(--card-border)] px-1.5 py-0.5 rounded-md"
                     >
                       {t}
                     </span>
@@ -330,29 +330,29 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
 
         {/* Processing State */}
         {isProcessing && (
-          <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl font-semibold text-xs text-indigo-500 mb-4 animate-pulse text-center">
+          <div className="p-3 bg-yellow-400 text-black font-black border-2 border-[var(--card-border)] shadow-[2px_2px_0px_var(--card-shadow)] rounded-xl text-xs mb-4 animate-pulse text-center">
             Analyzing screenshot & matching with VIT-AP menu...
           </div>
         )}
 
         {/* Results Preview */}
         {extractedRawText && (
-          <div className="space-y-2 mb-4 pt-3 border-t border-[var(--card-border)]">
+          <div className="space-y-2 mb-4 pt-3 border-t-2 border-[var(--card-border)]">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-[var(--text-primary)]">
+              <label className="text-xs font-black text-[var(--text-primary)]">
                 Matched Dishes for {targetDay.toUpperCase()} ({detectedDishes.length} items):
               </label>
-              <span className="text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-black bg-lime-400 text-black border border-[var(--card-border)] px-2 py-0.5 rounded-md">
                 Verified
               </span>
             </div>
-            <div className="flex flex-wrap gap-1.5 p-2 bg-[var(--card-border)]/20 border border-[var(--card-border)] rounded-xl max-h-36 overflow-y-auto">
+            <div className="flex flex-wrap gap-1.5 p-2 bg-black/5 dark:bg-white/5 border-2 border-[var(--card-border)] rounded-xl max-h-36 overflow-y-auto">
               {detectedDishes.map((dish, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1 text-xs font-medium bg-[var(--card-surface)] border border-[var(--card-border)] text-[var(--text-primary)] px-2 py-0.5 rounded-lg shadow-2xs"
+                  className="inline-flex items-center gap-1 text-xs font-bold bg-[var(--card-surface)] border border-[var(--card-border)] text-[var(--text-primary)] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_var(--card-shadow)]"
                 >
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                  <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
                   {dish}
                 </span>
               ))}
@@ -361,20 +361,20 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
         )}
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--card-border)]">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t-2 border-[var(--card-border)]">
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg border border-[var(--card-border)] text-[var(--text-secondary)] font-medium text-xs hover:bg-[var(--card-border)]/50"
+            className="px-4 py-1.5 rounded-xl border-2 border-[var(--card-border)] text-[var(--text-primary)] font-bold text-xs hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleConfirmAndApply}
             disabled={!extractedRawText}
-            className={`px-4 py-1.5 rounded-lg font-semibold text-xs transition-all ${
+            className={`px-4 py-1.5 rounded-xl font-black text-xs transition-all ${
               extractedRawText
-                ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-xs'
-                : 'bg-[var(--card-border)]/40 text-[var(--text-muted)] opacity-50 cursor-not-allowed shadow-none'
+                ? 'bg-yellow-400 text-black border-2 border-[var(--card-border)] shadow-[2.5px_2.5px_0px_var(--card-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none cursor-pointer'
+                : 'bg-black/10 text-[var(--text-muted)] border-2 border-dashed border-[var(--card-border)] opacity-40 cursor-not-allowed shadow-none'
             }`}
           >
             Apply to 7-Day Schedule
