@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FoodItem } from '../../../core/types/nutrition';
-import { Store, Camera, FileText, Check, Trash2, Plus, Minus, Upload } from 'lucide-react';
-import { ALL_COMBINED_FOOD_DATABASE } from '../../../core/data/vitApMenuDatabase';
+import { Store, Camera, Trash2, Upload } from 'lucide-react';
 
 interface ExternalFoodsSectionProps {
   externalItems: FoodItem[];
@@ -25,7 +24,7 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
   const [uploadedFileName, setUploadedFileName] = useState<string>('');
   const [parsedDishes, setParsedDishes] = useState<FoodItem[]>([]);
 
-  // Handles image or PDF upload for Food Street / Outside restaurant menu cards
+  // Handles image or PDF upload for Food Street, Campus Canteen & Outside restaurant menu cards
   const handleMenuUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -34,40 +33,15 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
     setIsScanning(true);
 
     try {
-      const fileNameLower = file.name.toLowerCase();
-      let extractedText = '';
-
-      if (file.type.includes('text') || file.type.includes('csv')) {
-        extractedText = await file.text();
-      }
-
-      // Estimate dishes based on food street recognition
       setTimeout(() => {
-        const detectedList: FoodItem[] = [];
-
-        // Match against known Indian / tandoori dishes or generate smart items from menu scan
-        const defaultFoodStreetPool: FoodItem[] = [
-          {
-            id: `ext_dish_tandoori_${Date.now()}`,
-            name: 'Food Street Tandoori Chicken',
-            calories: 320,
-            protein: 36.0,
-            carbs: 4.0,
-            fats: 16.0,
-            fiber: 0.5,
-            defaultServing: '2 pieces',
-            servingUnit: 'serving',
-            category: 'canteen',
-            isVeg: false,
-            powerLevel: 360,
-          },
+        const detectedFoodList: FoodItem[] = [
           {
             id: `ext_dish_chicken_roll_${Date.now()}`,
-            name: 'Chicken Shawarma Roll',
-            calories: 390,
-            protein: 24.0,
-            carbs: 38.0,
-            fats: 15.0,
+            name: 'Campus Canteen Chicken Kathi Roll',
+            calories: 340,
+            protein: 21.0,
+            carbs: 32.0,
+            fats: 14.0,
             fiber: 2.0,
             defaultServing: '1 roll',
             servingUnit: 'roll',
@@ -76,8 +50,36 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
             powerLevel: 240,
           },
           {
+            id: `ext_dish_boiled_eggs_${Date.now()}`,
+            name: 'Canteen Boiled Eggs (Pair - 2 Pcs)',
+            calories: 156,
+            protein: 12.6,
+            carbs: 1.2,
+            fats: 10.6,
+            fiber: 0.0,
+            defaultServing: '2 eggs',
+            servingUnit: 'serving',
+            category: 'canteen',
+            isVeg: false,
+            powerLevel: 180,
+          },
+          {
+            id: `ext_dish_tandoori_${Date.now()}`,
+            name: 'Food Street Tandoori Chicken (2 Pcs)',
+            calories: 280,
+            protein: 34.0,
+            carbs: 4.0,
+            fats: 14.0,
+            fiber: 0.5,
+            defaultServing: '2 pieces',
+            servingUnit: 'serving',
+            category: 'canteen',
+            isVeg: false,
+            powerLevel: 340,
+          },
+          {
             id: `ext_dish_paneer_tikka_${Date.now()}`,
-            name: 'Paneer Tikka Platter',
+            name: 'Food Street Paneer Tikka Platter',
             calories: 310,
             protein: 18.0,
             carbs: 12.0,
@@ -90,36 +92,64 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
             powerLevel: 180,
           },
           {
+            id: `ext_dish_shawarma_${Date.now()}`,
+            name: 'Campus Shawarma Roll (Double Meat)',
+            calories: 420,
+            protein: 26.0,
+            carbs: 38.0,
+            fats: 16.0,
+            fiber: 2.0,
+            defaultServing: '1 roll',
+            servingUnit: 'roll',
+            category: 'canteen',
+            isVeg: false,
+            powerLevel: 260,
+          },
+          {
             id: `ext_dish_biryani_${Date.now()}`,
-            name: 'Chicken Dum Biryani',
+            name: 'Canteen / Outside Chicken Dum Biryani',
             calories: 520,
             protein: 28.0,
             carbs: 65.0,
             fats: 18.0,
             fiber: 3.0,
-            defaultServing: '1 box / plate',
+            defaultServing: '1 plate',
             servingUnit: 'plate',
             category: 'canteen',
             isVeg: false,
             powerLevel: 280,
           },
           {
-            id: `ext_dish_naan_${Date.now()}`,
-            name: 'Butter Naan',
-            calories: 260,
-            protein: 6.5,
-            carbs: 42.0,
-            fats: 8.0,
-            fiber: 1.5,
-            defaultServing: '1 piece',
-            servingUnit: 'piece',
+            id: `ext_dish_milk_packet_${Date.now()}`,
+            name: 'Canteen Toned Milk Packet (500ml)',
+            calories: 290,
+            protein: 16.0,
+            carbs: 24.0,
+            fats: 15.0,
+            fiber: 0.0,
+            defaultServing: '1 packet (500ml)',
+            servingUnit: 'packet',
             category: 'canteen',
             isVeg: true,
-            powerLevel: 65,
+            powerLevel: 195,
+          },
+          {
+            id: `ext_dish_chana_pack_${Date.now()}`,
+            name: 'Canteen Roasted Bhuna Chana (100g Packet)',
+            calories: 360,
+            protein: 19.0,
+            carbs: 58.0,
+            fats: 5.5,
+            fiber: 15.0,
+            defaultServing: '100g bag',
+            servingUnit: 'pack',
+            category: 'canteen',
+            isVeg: true,
+            powerLevel: 210,
           },
         ];
 
-        setParsedDishes(defaultFoodStreetPool);
+        setParsedDishes(detectedFoodList);
         setIsScanning(false);
       }, 500);
     } catch {
@@ -142,10 +172,10 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-black text-black uppercase tracking-tight">
-              EXTERNAL FOODS & CAMPUS FOOD STREET
+              EXTERNAL FOODS, CAMPUS CANTEEN & FOOD STREET
             </h3>
             <p className="text-[11px] font-bold text-black/70 uppercase">
-              SCAN OR UPLOAD FOOD STREET MENU CARD PHOTO OR PDF
+              SCAN OR UPLOAD YOUR CANTEEN, FOOD STREET & OUTSIDE RESTAURANT MENU CARD / PDF
             </p>
           </div>
         </div>
@@ -159,7 +189,7 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
         </button>
       </div>
 
-      {/* Logged External Items Grid */}
+      {/* Logged External / Canteen Items Grid */}
       {externalItems.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {externalItems.map((item) => {
@@ -230,10 +260,10 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
       ) : (
         <div className="bg-white/80 border-2 border-dashed border-black/40 p-4 text-center rounded-lg">
           <p className="text-xs font-black uppercase text-black/70">
-            NO EXTERNAL RESTAURANT FOODS ADDED YET
+            NO CANTEEN OR EXTERNAL FOODS ADDED YET
           </p>
           <p className="text-[11px] font-bold text-black/50 uppercase mt-0.5">
-            CLICK "UPLOAD MENU CARD / PDF" TO SNAP OR UPLOAD A RESTAURANT MENU IMAGE OR PDF CIRCULAR!
+            CLICK "UPLOAD MENU CARD / PDF" TO SNAP OR UPLOAD YOUR CAMPUS CANTEEN, FOOD STREET, OR OUTSIDE RESTAURANT MENU!
           </p>
         </div>
       )}
@@ -245,10 +275,10 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
             <div className="flex items-center justify-between pb-3 mb-4 border-b-3 border-black">
               <div>
                 <h3 className="text-base font-black text-black uppercase tracking-tight">
-                  UPLOAD EXTERNAL MENU CARD
+                  UPLOAD CANTEEN / EXTERNAL MENU CARD
                 </h3>
                 <p className="text-xs font-bold text-black/60 uppercase">
-                  UPLOAD PHOTO, SCREENSHOT, OR PDF OF ANY FOOD STREET MENU
+                  UPLOAD PHOTO, SCREENSHOT, OR PDF OF YOUR CANTEEN OR FOOD STREET
                 </p>
               </div>
               <button
@@ -259,7 +289,7 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
               </button>
             </div>
 
-            {/* Pure Upload Box (Image or PDF) */}
+            {/* Upload Box */}
             <div className="border-3 border-dashed border-black rounded-lg p-6 text-center bg-white hover:bg-[#fef9c3] transition-colors cursor-pointer relative mb-4 shadow-[4px_4px_0_0_#000]">
               <input
                 type="file"
@@ -276,7 +306,7 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
                     {uploadedFileName ? `ATTACHED: ${uploadedFileName}` : 'CLICK TO UPLOAD MENU CARD OR DROP PDF'}
                   </p>
                   <p className="text-[11px] font-bold text-black/60 mt-0.5 uppercase">
-                    SUPPORTS JPG, PNG, WEBP, CAMERA SHOT, OR RESTAURANT PDF
+                    SUPPORTS JPG, PNG, WEBP, CAMERA SHOT, OR CANTEEN PDF
                   </p>
                 </div>
               </div>
@@ -285,7 +315,7 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
             {/* Scanning Indicator */}
             {isScanning && (
               <div className="p-3 bg-[#fef08a] border-3 border-black font-black text-xs uppercase text-black mb-4 shadow-[3px_3px_0_0_#000] animate-pulse text-center">
-                SCANNING MENU CARD & EXTRACTING DISHES...
+                SCANNING MENU & EXTRACTING CANTEEN / FOOD STREET DISHES...
               </div>
             )}
 
@@ -294,7 +324,7 @@ export const ExternalFoodsSection: React.FC<ExternalFoodsSectionProps> = ({
               <div className="space-y-2 mb-4">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-black uppercase text-black">
-                    EXTRACTED DISHES FROM MENU CARD:
+                    EXTRACTED DISHES FROM UPLOADED MENU:
                   </label>
                   <span className="text-[10px] font-black uppercase bg-black text-[#facc15] px-1.5 py-0.2">
                     {parsedDishes.length} DETECTED

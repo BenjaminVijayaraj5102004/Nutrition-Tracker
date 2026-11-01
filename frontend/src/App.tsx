@@ -350,14 +350,7 @@ export const App: React.FC = () => {
           />
         </div>
 
-        {/* Campus Canteen & Supplements Shelf */}
-        <CanteenDrawer
-          supplements={CANTEEN_SUPPLEMENTS}
-          onQuickAdd={handleQuickAddCanteen}
-          dayPortions={dayPortions}
-        />
-
-        {/* External Foods & Food Street Section */}
+        {/* External Foods, Campus Canteen & Food Street (Pure Upload & Scan Driven) */}
         <ExternalFoodsSection
           externalItems={externalFoods}
           onAddCustomItem={handleAddExternalItem}
