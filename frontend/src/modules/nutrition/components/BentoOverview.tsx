@@ -1,6 +1,6 @@
 import React from 'react';
 import { DeficitAnalysis } from '../../../core/types/nutrition';
-import { AlertCircle, CheckCircle2, TrendingUp, Zap } from 'lucide-react';
+import { AlertCircle, CheckCircle2, TrendingUp, Soup } from 'lucide-react';
 
 interface BentoOverviewProps {
   analysis: DeficitAnalysis;
@@ -18,7 +18,7 @@ export const BentoOverview: React.FC<BentoOverviewProps> = ({ analysis }) => {
         <div className="relative">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-black uppercase tracking-wider text-black bg-yellow-400 border-1.5 border-[var(--card-border)] shadow-[1.5px_1.5px_0px_var(--card-shadow)] px-2.5 py-0.5 rounded-md flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 fill-black text-black" />
+              <Soup className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Target • Daily Protein</span>
             </span>
             <span className="text-xs font-black font-mono text-[var(--text-primary)] bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-md border border-[var(--card-border)]">
